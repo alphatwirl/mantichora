@@ -3,7 +3,7 @@
 
 A simple interface to threading and multiprocessing
 
-_mantichora_ provides a simple interface
+_mantichora_ provides a simple interface to
 [threading](https://docs.python.org/3/library/threading.html) and
 [multiprocessing](https://docs.python.org/3/library/multiprocessing.html).
 
@@ -12,6 +12,7 @@ sub-package
 [_concurrently_](https://github.com/alphatwirl/alphatwirl/tree/v0.23.2/alphatwirl/concurrently)
 in [_alphatwirl_](https://github.com/alphatwirl/alphatwirl).
 
+*****
 
 ## License
 
