@@ -10,7 +10,7 @@ from collections import deque
 
 import atpbar
 
-from .Worker import Worker
+from .worker import Worker
 
 ##__________________________________________________________________||
 # https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
