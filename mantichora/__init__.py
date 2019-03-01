@@ -1,5 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-from .MultiprocessingDropbox import MultiprocessingDropbox
+from .hub import MultiprocessingDropbox
 from .TaskPackage import TaskPackage
 
 from ._version import get_versions
