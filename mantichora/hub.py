@@ -13,9 +13,6 @@ from .TaskPackage import TaskPackage
 
 from .Worker import Worker
 
-from alphatwirl.misc.deprecation import _deprecated_class_method_option
-import alphatwirl
-
 ##__________________________________________________________________||
 # https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
 def logger_thread(queue):
@@ -41,8 +38,7 @@ class MultiprocessingDropbox(object):
         True.
 
     """
-    @_deprecated_class_method_option('progressMonitor')
-    def __init__(self, nprocesses=16, progressMonitor=None, progressbar=True):
+    def __init__(self, nprocesses=16, progressbar=True):
 
         if nprocesses <= 0:
             raise ValueError("nprocesses must be at least one: {} is given".format(nprocesses))

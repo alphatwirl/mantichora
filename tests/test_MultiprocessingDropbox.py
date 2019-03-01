@@ -79,14 +79,8 @@ class MockProgressReporter(object):
     pass
 
 @pytest.fixture()
-def mock_progressmonitor():
-    ret = mock.MagicMock()
-    ret.create_reporter.return_value = MockProgressReporter()
-    return ret
-
-@pytest.fixture()
-def obj(mock_progressmonitor):
-    ret = MultiprocessingDropbox(progressMonitor=mock_progressmonitor)
+def obj():
+    ret = MultiprocessingDropbox()
     ret.open()
     yield ret
     ret.terminate()
