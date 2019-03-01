@@ -10,8 +10,8 @@ try:
 except ImportError:
     import mock
 
-from alphatwirl.concurrently import MultiprocessingDropbox
-from alphatwirl.concurrently import TaskPackage
+from mantichora import MultiprocessingDropbox
+from mantichora import TaskPackage
 
 ##__________________________________________________________________||
 def test_init_raise():
