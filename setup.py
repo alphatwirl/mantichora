@@ -20,7 +20,6 @@ setup(
     url='https://github.com/alphatwirl/mantichora',
     classifiers=[
         'Development Status :: 1 - Planning',
-        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: BSD License',
