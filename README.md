@@ -1,3 +1,4 @@
+[![PyPI version](https://badge.fury.io/py/mantichora.svg)](https://badge.fury.io/py/mantichora) [![Build Status](https://travis-ci.org/alphatwirl/mantichora.svg?branch=master)](https://travis-ci.org/alphatwirl/mantichora) [![codecov](https://codecov.io/gh/alphatwirl/mantichora/branch/master/graph/badge.svg)](https://codecov.io/gh/alphatwirl/mantichora)
 
 # mantichora
 
