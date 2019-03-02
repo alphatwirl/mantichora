@@ -49,10 +49,14 @@ def package1():
 
 ##__________________________________________________________________||
 def test_put(obj, package1, logger, caplog):
+    ## caplog doesn't catch logging with obj from fixture
+    ## so recreate it here
+    obj = MultiprocessingDropbox()
+    obj.open()
     with caplog.at_level(logging.INFO, logger=__name__):
         obj.put(package1)
+    obj.close()
 
-    ## caplog doesn't catch probably because of threading
-    # assert len(caplog.records) == 1
+    assert len(caplog.records) == 1
 
 ##__________________________________________________________________||
