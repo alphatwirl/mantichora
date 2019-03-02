@@ -98,15 +98,15 @@ Let us define a simple task function.
 
 ```python
 def task_loop(name, ret=None):
-    n = random.randint(1000, 100000)
+    n = random.randint(1000, 10000)
     for i in atpbar(range(n), name=name):
         time.sleep(0.0001)
     return ret
 ```
 
 The task in this function is to sleep for `0.0001` seconds as many
-times as the number randomly selected from between `10000` and
-`100000`. `atpbar` is used to show a progress bar. The function takes
+  * [ ] times as the number randomly selected from between `1000` and
+`10000`. `atpbar` is used to show a progress bar. The function takes
 two arguments: `name`, the label on the progress bar, and `ret`, the
 return value of the function.
 
