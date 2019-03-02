@@ -18,8 +18,7 @@ class mantichora(object):
             self.terminate()
         self.end()
 
-    def run(self, task, *args, **kwargs):
-        package = TaskPackage(task=task, args=args, kwargs=kwargs)
+    def run(self, func, *args, **kwargs):
         return self.dropbox.put(package)
 
     def returns(self):
