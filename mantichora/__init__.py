@@ -1,4 +1,6 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+from .main import mantichora
+
 from .hub import MultiprocessingDropbox
 from .hub import TaskPackage
 
