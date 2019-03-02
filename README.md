@@ -39,6 +39,10 @@ The code in this package was originally developed in the sub-package
 [_concurrently_](https://github.com/alphatwirl/alphatwirl/tree/v0.23.2/alphatwirl/concurrently)
 of [_alphatwirl_](https://github.com/alphatwirl/alphatwirl).
 
+
+The examples in this file can be also run on Jupyter Notebook. <br />
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alphatwirl/notebook-mantichora-001/master?filepath=mantichora.ipynb)
+
 *****
 
 - [**Requirement**](#requirement)
