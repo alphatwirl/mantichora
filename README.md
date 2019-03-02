@@ -112,7 +112,7 @@ return value of the function.
 
 **Note:** Mantichora uses
 [multiprocessing](https://docs.python.org/3/library/multiprocessing.html)
-to run task functions in background processes . As a result, task
+to run task functions in background processes. As a result, task
 functions, their arguments, and their return values need to be
 [picklable](https://docs.python.org/3.6/library/pickle.html#what-can-be-pickled-and-unpickled).
 
