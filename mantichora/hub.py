@@ -159,6 +159,9 @@ class MultiprocessingDropbox(object):
         # sort in the order of task_idx
         messages = sorted(messages, key=itemgetter(0))
 
+        if self.progressbar:
+            atpbar.flush()
+
         return messages
 
     def _receive_finished(self):
