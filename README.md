@@ -116,7 +116,7 @@ to run task functions in background processes . As a result, task
 functions, their arguments, and their return values need to be
 [picklable](https://docs.python.org/3.6/library/pickle.html#what-can-be-pickled-and-unpickled).
 
-You can just try running this functions without using Mantichora.
+You can just try running this function without using Mantichora.
 
 ```python
 result = task_loop('task1', 'result1')
@@ -169,13 +169,13 @@ can call `mcore.run()` as many times as you need. In the above
 example, `mcore.run()` is called with the same task function with
 different arguments. You can also use a different function each time.
 `mcore.run()` returns immediately; it doesn't wait for the task to
-finish or event to start. In each call, `mcore.run()` only puts a task
+finish or even to start. In each call, `mcore.run()` only puts a task
 in a queue. The workers in background processes pick up tasks from the
 queue and run them.
 
 The `mcore.returns()` waits until all tasks finish and returns their
 return values, which are sorted in the order of the tasks you have
-originally give to `mcore.run()`.
+originally given to `mcore.run()`.
 
 Progress bars will be shown by `atpbar`.
 
