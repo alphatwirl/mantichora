@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.2...master))
+- updated required `atpbar` version from 0.9.7 to 0.9.8
 - updated `README.md`, tests
 
 ## [0.9.2] - 2019-03-02
