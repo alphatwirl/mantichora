@@ -105,7 +105,7 @@ def task_loop(name, ret=None):
 ```
 
 The task in this function is to sleep for `0.0001` seconds as many
-  * [ ] times as the number randomly selected from between `1000` and
+times as the number randomly selected from between `1000` and
 `10000`. `atpbar` is used to show a progress bar. The function takes
 two arguments: `name`, the label on the progress bar, and `ret`, the
 return value of the function.
