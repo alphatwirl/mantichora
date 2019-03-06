@@ -43,7 +43,6 @@ def test_with_raise():
 
 ##__________________________________________________________________||
 ## what to test
-## - logging
 ## - receive_one
 ## - atpbar
 
