@@ -30,9 +30,21 @@ def test_with():
         assert ['result 1', 'result 2', 'result 3'] == returns
 
 ##__________________________________________________________________||
+class MyException(Exception):
+    pass
+
+def test_with_raise():
+    with pytest.raises(MyException):
+        with mantichora() as mcore:
+            mcore.run(task, 0.05, 'result 1')
+            mcore.run(task, 0.01, 'result 2')
+            mcore.run(task, 0.02, 'result 3')
+            raise MyException
+
+##__________________________________________________________________||
 ## what to test
 ## - logging
 ## - receive_one
 ## - atpbar
-## - exception
+
 ##__________________________________________________________________||
