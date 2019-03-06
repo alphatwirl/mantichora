@@ -4,7 +4,7 @@
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.2...master))
 - updated required `atpbar` version from 0.9.7 to 1.0.1
-- updated `README.md`, 'MANIFEST.in', tests
+- updated `README.md`, 'MANIFEST.in', `setup.py`, tests
 
 ## [0.9.2] - 2019-03-02
 
