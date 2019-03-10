@@ -83,6 +83,20 @@ class mantichora(object):
         """
         return self.dropbox.receive_one()
 
+    def receive_finished(self):
+        """return pairs of the run IDs and return values of finished task function
+
+        This method doesn't wait.
+
+        Returns
+        -------
+        list or None
+            pairs of the run IDs and return values of task functions.
+            `None` if no task functions are outstanding.
+
+        """
+        return self.dropbox.poll()
+
     def receive_all(self):
         return self.dropbox.receive()
 

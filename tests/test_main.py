@@ -73,6 +73,25 @@ def test_receive_one():
     assert sorted(expected) == sorted(pairs)
 
 ##__________________________________________________________________||
+def test_receive_finished():
+    with mantichora() as mcore:
+        runids = [
+            mcore.run(task, 0.05, 'result 1'),
+            mcore.run(task, 0.01, 'result 2'),
+            mcore.run(task, 0.02, 'result 3'),
+        ]
+        pairs = [ ]
+        while len(pairs) < 3:
+            ps = mcore.receive_finished()
+            pairs.extend(ps)
+    expected = [
+        (runids[0], 'result 1'),
+        (runids[1], 'result 2'),
+        (runids[2], 'result 3'),
+    ]
+    assert sorted(expected) == sorted(pairs)
+
+##__________________________________________________________________||
 ## what to test
 ## - atpbar
 
