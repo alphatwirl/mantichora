@@ -62,12 +62,8 @@ class mantichora(object):
             return values of the task functions
 
         """
-
-        pkgidx_result_pairs = self.receive_all()
-        if pkgidx_result_pairs is None:
-            return
-        results = [r for _, r in pkgidx_result_pairs]
-        return results
+        pairs = self.receive_all() # list of pairs (runid, result)
+        return [p[1] for p in pairs]
 
     def receive_one(self):
         """return a pair of the run ID and return value of a task function
