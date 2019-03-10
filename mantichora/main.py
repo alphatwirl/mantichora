@@ -25,8 +25,7 @@ class mantichora(object):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type:
-            self.terminate()
+        self.terminate()
         self.end()
 
     def run(self, func, *args, **kwargs):
