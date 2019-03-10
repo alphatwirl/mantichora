@@ -47,10 +47,18 @@ The examples in this file can be also run on Jupyter Notebook. <br />
 
 - [**Requirement**](#requirement)
 - [**Install**](#install)
-- [**Quick start**](#quick-start)
-    - [Import libraries](#import-libraries)
-    - [Define a task function](#define-a-task-function)
-    - [Run tasks concurrently with Mantichora](#run-tasks-concurrently-with-mantichora)
+- [**User guide**](#user-guide)
+    - [**Quick start**](#quick-start)
+        - [Import libraries](#import-libraries)
+        - [Define a task function](#define-a-task-function)
+        - [Run tasks concurrently with Mantichora](#run-tasks-concurrently-with-mantichora)
+    - [**Features**](#features)
+        - [Without the `with` statement](#without-the-with-statement)
+            - [`end()`](#end)
+            - [`terminate()`](#terminate)
+        - [Receive results as tasks finish](#receive-results-as-tasks-finish)
+            - [`receive_one()`](#receive_one)
+            - [`receive_finished()`](#receive_finished)
 - [**License**](#license)
 - [**Contact**](#contact)
 
@@ -59,7 +67,7 @@ The examples in this file can be also run on Jupyter Notebook. <br />
 ## Requirement
 
 - Python 2.7, 3.6, or 3.7
-- [atpbar](https://github.com/alphatwirl/atpbar) >= 1.0.1
+- [atpbar](https://github.com/alphatwirl/atpbar) >= 1.0.2
 
 *****
 
@@ -73,11 +81,13 @@ $ pip install -U mantichora
 
 *****
 
-## Quick start
+## User guide
+
+### Quick start
 
 I will show here how to use Mantichora by simple examples.
 
-### Import libraries
+#### Import libraries
 
 We are going use two python standard libraries
 [time](https://docs.python.org/3/library/time.html) and
@@ -92,7 +102,7 @@ from atpbar import atpbar
 from mantichora import mantichora
 ```
 
-### Define a task function
+#### Define a task function
 
 Let us define a simple task function.
 
@@ -139,7 +149,7 @@ print(result)
  'result1'
 ```
 
-### Run tasks concurrently with Mantichora
+#### Run tasks concurrently with Mantichora
 
 Now, we run multiple tasks concurrently with Mantichora.
 
@@ -199,6 +209,189 @@ print(results)
 ['result1', 'result2', 'result3', 'result4', 'result5', 'result6']
 ```
  
+*****
+
+### Features
+
+#### Without the `with` statement
+
+##### `end()`
+
+If you don't use the `with` statement, you need to call `end()`.
+
+```python
+mcore = mantichora()
+
+mcore.run(task_loop, 'task', ret='result1')
+mcore.run(task_loop, 'another task', ret='result2')
+mcore.run(task_loop, 'still another task', ret='result3')
+mcore.run(task_loop, 'yet another task', ret='result4')
+mcore.run(task_loop, 'task again', ret='result5')
+mcore.run(task_loop, 'more task', ret='result6')
+
+results = mcore.returns()
+
+mcore.end()
+print(results)
+```
+
+```
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     4695 /     4695 |:  yet another task
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     7535 /     7535 |:  still another task
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     9303 /     9303 |:  another task
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     9380 /     9380 |:  task
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     5812 /     5812 |:  more task
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     9437 /     9437 |:  task again
+['result1', 'result2', 'result3', 'result4', 'result5', 'result6']
+```
+
+##### `terminate()`
+
+`mantichora` can be terminated with `terminate()`. After `terminate()`
+is called, `end()` still needs to be called. In the example below,
+`terminate()` is called after 0.5 seconds of sleep while some tasks
+are still running.
+
+```python
+mcore = mantichora()
+
+mcore.run(task_loop, 'task', ret='result1')
+mcore.run(task_loop, 'another task', ret='result2')
+mcore.run(task_loop, 'still another task', ret='result3')
+mcore.run(task_loop, 'yet another task', ret='result4')
+mcore.run(task_loop, 'task again', ret='result5')
+mcore.run(task_loop, 'more task', ret='result6')
+
+time.sleep(0.5)
+
+mcore.terminate()
+mcore.end()
+```
+
+The progress bars stop when the tasks are terminated.
+
+```
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     2402 /     2402 |:  still another task
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     3066 /     3066 |:  another task
+  59.28% :::::::::::::::::::::::                  |     2901 /     4894 |:  task
+  69.24% :::::::::::::::::::::::::::              |     2919 /     4216 |:  yet another task
+   0.00%                                          |        0 /     9552 |:  task again
+   0.00%                                          |        0 /     4898 |:  more task
+```
+
+*****
+
+#### Receive results as tasks finish
+
+Instead of waiting for all tasks to finish beofre receiving the
+reulsts, you can get results as tasks finish with the method
+`receive_one()` or `receive_receive()`.
+
+#### `receive_one()`
+
+The method `receive_one()` returns a pair of the run ID and the return
+value of a task function. If no task has finished, `receive_one()`
+waits until one task finishes. `receive_one()` returns `None` if no
+tasks are outstanding. The method `run()` returns the run ID for the
+task.
+
+```python
+with mantichora() as mcore:
+    runids = [ ]
+    runids.append(mcore.run(task_loop, 'task1', ret='result1'))
+    runids.append(mcore.run(task_loop, 'task2', ret='result2'))
+    runids.append(mcore.run(task_loop, 'task3', ret='result3'))
+    runids.append(mcore.run(task_loop, 'task4', ret='result4'))
+    runids.append(mcore.run(task_loop, 'task5', ret='result5'))
+    runids.append(mcore.run(task_loop, 'task6', ret='result6'))
+    #
+    pairs = [ ]
+    for i in range(len(runids)):
+        pairs.append(mcore.receive_one())
+```
+
+```
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     1748 /     1748 |:  task3
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     4061 /     4061 |:  task1
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     2501 /     2501 |:  task5
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     2028 /     2028 |:  task6
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     8206 /     8206 |:  task4
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     9157 /     9157 |:  task2
+```
+
+The `runid` is the list of the run IDs in the order of the tasks that
+have been given to `run()`.
+
+```python
+print(runids)
+```
+
+```
+[0, 1, 2, 3, 4, 5]
+```
+
+The `pairs` are in the order in which the tasks have finished.
+
+```python
+print(pairs)
+```
+
+```
+[(2, 'result3'), (0, 'result1'), (4, 'result5'), (5, 'result6'), (3, 'result4'), (1, 'result2')]
+```
+
+##### `receive_finished()`
+
+The method `receive_finished()` returns a list of pairs of the run ID
+and the return value of finished task functions. The method
+`receive_finished()` doesn't wait for a task to finish. It returns an
+empty list if no task has finished.
+
+```python
+with mantichora() as mcore:
+    runids = [ ]
+    runids.append(mcore.run(task_loop, 'task1', ret='result1'))
+    runids.append(mcore.run(task_loop, 'task2', ret='result2'))
+    runids.append(mcore.run(task_loop, 'task3', ret='result3'))
+    runids.append(mcore.run(task_loop, 'task4', ret='result4'))
+    runids.append(mcore.run(task_loop, 'task5', ret='result5'))
+    runids.append(mcore.run(task_loop, 'task6', ret='result6'))
+    #
+    pairs = [ ]
+    while len(pairs) < len(runids):
+        pairs.extend(mcore.receive_finished())
+```
+
+```
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     3979 /     3979 |:  task3
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     6243 /     6243 |:  task2
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     6640 /     6640 |:  task1
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     8632 /     8632 |:  task4
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     6235 /     6235 |:  task5
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     8325 /     8325 |:  task6
+```
+
+The `runid` is again the list of the run IDs in the order of the tasks
+that have been given to `run()`.
+
+```python
+print(runids)
+```
+
+```
+[0, 1, 2, 3, 4, 5]
+```
+
+The `pairs` are also again in the order in which the tasks have finished.
+
+```python
+print(pairs)
+```
+
+```
+[(2, 'result3'), (1, 'result2'), (0, 'result1'), (3, 'result4'), (4, 'result5'), (5, 'result6')]
+```
+
 *****
 
 ## License
