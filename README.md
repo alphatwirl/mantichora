@@ -59,6 +59,7 @@ The examples in this file can be also run on Jupyter Notebook. <br />
         - [Receive results as tasks finish](#receive-results-as-tasks-finish)
             - [`receive_one()`](#receive_one)
             - [`receive_finished()`](#receive_finished)
+        - [Logging](#logging)
 - [**License**](#license)
 - [**Contact**](#contact)
 
@@ -390,6 +391,71 @@ print(pairs)
 
 ```
 [(2, 'result3'), (1, 'result2'), (0, 'result1'), (3, 'result4'), (4, 'result5'), (5, 'result6')]
+```
+
+*****
+
+#### Logging
+
+Logging in background processes is propagated to the main process in
+the way described in a [section of Logging
+Cookbook](https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes).
+
+Here is a simple example task function that uses `logging`. The task
+function does logging just before returning.
+
+
+```python
+import logging
+
+def task_log(name, ret=None):
+    n = random.randint(1000, 10000)
+    for i in atpbar(range(n), name=name):
+        time.sleep(0.0001)
+    logging.info('finishing "{}"'.format(name))
+    return ret
+```
+
+Set the logging stream to a string stream so that we can later
+retrieve the logging as a string.
+
+```python
+import io
+stream = io.StringIO()
+logging.basicConfig(level=logging.INFO, stream=stream)
+```
+
+Run the tasks.
+
+```python
+with mantichora() as mcore:
+    mcore.run(task_log, 'task1', ret='result1')
+    mcore.run(task_log, 'task2', ret='result2')
+    mcore.run(task_log, 'task3', ret='result3')
+    mcore.run(task_log, 'task4', ret='result4')
+    results = mcore.returns()
+```
+
+```
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     4217 /     4217 |:  task2
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     7691 /     7691 |:  task3
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     8140 /     8140 |:  task1
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     9814 /     9814 |:  task4
+```
+
+Logging made in the task function in background processes is sent to
+the main process and written in the string stream.
+
+
+```python
+print(stream.getvalue())
+```
+
+```
+INFO:root:finishing "task2"
+INFO:root:finishing "task3"
+INFO:root:finishing "task1"
+INFO:root:finishing "task4"
 ```
 
 *****
