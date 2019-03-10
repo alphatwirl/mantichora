@@ -52,8 +52,28 @@ def test_with_raise():
             raise MyException
 
 ##__________________________________________________________________||
+def test_receive_one():
+    with mantichora() as mcore:
+        runids = [
+            mcore.run(task, 0.05, 'result 1'),
+            mcore.run(task, 0.01, 'result 2'),
+            mcore.run(task, 0.02, 'result 3'),
+        ]
+        pairs = [ ]
+        while True:
+            p = mcore.receive_one()
+            if p is None:
+                break
+            pairs.append(p)
+    expected = [
+        (runids[0], 'result 1'),
+        (runids[1], 'result 2'),
+        (runids[2], 'result 3'),
+    ]
+    assert sorted(expected) == sorted(pairs)
+
+##__________________________________________________________________||
 ## what to test
-## - receive_one
 ## - atpbar
 
 ##__________________________________________________________________||

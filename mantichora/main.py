@@ -69,6 +69,20 @@ class mantichora(object):
         results = [r for _, r in pkgidx_result_pairs]
         return results
 
+    def receive_one(self):
+        """return a pair of the run ID and return value of a task function
+
+        This method waits until one task function finishes.
+
+        Returns
+        -------
+        list or None
+            a pair of the run ID and return value of a task function.
+            `None` if no task functions are outstanding.
+
+        """
+        return self.dropbox.receive_one()
+
     def receive_all(self):
         return self.dropbox.receive()
 
