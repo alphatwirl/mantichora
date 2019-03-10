@@ -113,4 +113,13 @@ def test_receive_one_then_poll(obj, expected):
         actual.extend(obj.poll())
     assert expected == sorted(actual)
 
+def test_poll_then_receive_one(obj, expected):
+    actual = [ ]
+    while not actual:
+        actual.extend(obj.poll())
+    while len(actual) < len(expected):
+        actual.append(obj.receive_one())
+    assert obj.receive_one() is None
+    assert expected == sorted(actual)
+
 ##__________________________________________________________________||
