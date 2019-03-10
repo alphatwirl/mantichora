@@ -29,12 +29,12 @@ class mantichora(object):
         self.end()
 
     def run(self, func, *args, **kwargs):
-        """run a function in a background process
+        """run a task function in a background process
 
         Parameters
         ----------
         func : callable
-            A function to be run in a background process
+            A task function to be run in a background process
         args : list
             Positional parameters to `func`
         kwargs: dict
@@ -49,10 +49,17 @@ class mantichora(object):
         return self.dropbox.put(package)
 
     def returns(self):
-        """wait until all functions finish running and return a list of return values
+        """return a list of return values of the task functions
 
-        The return values are sorted in the order of the functions which have
-        been given to `run()`
+        The return values are sorted in the order of the task
+        functions which have been given to `run()`
+
+        This method waits until all task functions finish.
+
+        Returns
+        -------
+        list
+            return values of the task functions
 
         """
 
