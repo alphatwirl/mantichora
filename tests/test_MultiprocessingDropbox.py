@@ -75,9 +75,6 @@ def package4():
     return TaskPackage(task=task, args=args, kwargs=kwargs)
 
 ##__________________________________________________________________||
-class MockProgressReporter(object):
-    pass
-
 @pytest.fixture()
 def obj():
     ret = MultiprocessingDropbox()
@@ -145,7 +142,6 @@ def test_put_receive_repeat(obj, package1, package2, package3, package4):
     assert expected == actual
 
 def test_begin_put_recive_end_repeat(obj, package1, package2):
-
     obj.put(package1)
     obj.receive()
     obj.close()
@@ -154,13 +150,11 @@ def test_begin_put_recive_end_repeat(obj, package1, package2):
     obj.receive()
 
 def test_terminate(obj, package1, package2):
-
     obj.put(package1)
     obj.put(package2)
     obj.terminate()
 
 def test_terminate_close(obj, package1, package2):
-
     obj.put(package1)
     obj.put(package2)
     obj.terminate()
