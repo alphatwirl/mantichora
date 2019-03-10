@@ -92,6 +92,7 @@ def test_poll_then_receive(obj, expected):
 
 ##__________________________________________________________________||
 def test_receive_one(obj, expected):
+    time.sleep(0.005) # so multiple jobs finish
     actual = [ ]
     for i in range(len(expected)):
         actual.append(obj.receive_one())
