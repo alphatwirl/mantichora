@@ -1,4 +1,4 @@
-[![PyPI version](https://badge.fury.io/py/mantichora.svg)](https://badge.fury.io/py/mantichora)  [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.2581882.svg)](https://doi.org/10.5281/zenodo.2581882) [![Build Status](https://travis-ci.org/alphatwirl/mantichora.svg?branch=master)](https://travis-ci.org/alphatwirl/mantichora) [![codecov](https://codecov.io/gh/alphatwirl/mantichora/branch/master/graph/badge.svg)](https://codecov.io/gh/alphatwirl/mantichora)
+[![PyPI version](https://badge.fury.io/py/mantichora.svg)](https://badge.fury.io/py/mantichora) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/mantichora/badges/version.svg)](https://anaconda.org/conda-forge/mantichora) [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.2581882.svg)](https://doi.org/10.5281/zenodo.2581882) [![Build Status](https://travis-ci.org/alphatwirl/mantichora.svg?branch=master)](https://travis-ci.org/alphatwirl/mantichora) [![codecov](https://codecov.io/gh/alphatwirl/mantichora/branch/master/graph/badge.svg)](https://codecov.io/gh/alphatwirl/mantichora)
 
 # Mantichora
 
@@ -74,13 +74,17 @@ The examples in this file can be also run on Jupyter Notebook. <br />
 
 ## Install
 
-You can install Mantichora with `pip`.
+You can install with `conda` from conda-forge:
 
 ```bash
-$ pip install -U mantichora
+conda install -c conda-forge mantichora
 ```
 
-*****
+or with `pip`:
+
+```bash
+pip install -U mantichora
+```
 
 ## User guide
 
