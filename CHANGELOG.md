@@ -3,7 +3,8 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.3...master))
-- updated `README.md`
+- updated `README.md`, docstrings
+- cleaned up code
 
 ## [0.9.3] - 2019-03-10
 
