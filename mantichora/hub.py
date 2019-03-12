@@ -67,6 +67,14 @@ class MultiprocessingDropbox(object):
         )
 
     def open(self):
+        """open the drop box
+
+        This method needs to be called before a task is put.
+
+        Returns
+        -------
+        None
+        """
 
         if len(self.workers) >= self.n_max_workers:
             # workers already created
@@ -97,12 +105,32 @@ class MultiprocessingDropbox(object):
             self.workers.append(worker)
 
     def put(self, package):
+        """put a task package
+
+        The task will be executed in a background process
+
+        Returns
+        -------
+        int
+            The task index
+
+        """
         self.task_idx += 1
         self.task_queue.put((self.task_idx, package))
         self.n_ongoing_tasks += 1
         return self.task_idx
 
     def put_multiple(self, packages):
+        """put a list of task packages
+
+        The tasks will be executed in background processes
+
+        Returns
+        -------
+        list
+            The list of the task indices
+
+        """
         task_idxs = [ ]
         for package in packages:
             task_idxs.append(self.put(package))
@@ -164,6 +192,13 @@ class MultiprocessingDropbox(object):
         return messages
 
     def terminate(self):
+        """terminate running tasks
+
+        Returns
+        -------
+        None
+        """
+
         for worker in self.workers:
             worker.terminate()
 
@@ -174,6 +209,12 @@ class MultiprocessingDropbox(object):
         self.workers = [ ]
 
     def close(self):
+        """close the drop box
+
+        Returns
+        -------
+        None
+        """
 
         # end workers
         if self.workers:
