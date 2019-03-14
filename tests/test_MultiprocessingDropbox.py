@@ -53,7 +53,7 @@ def test_put_multiple(obj):
 
 def test_put_receive(obj):
     idx1 = obj.put(functools.partial(task, 0.010, 'result1'))
-    idx2 =obj.put(functools.partial(task, 0.001, 'result2'))
+    idx2 = obj.put(functools.partial(task, 0.001, 'result2'))
 
     expected = [
         (idx1, 'result1'),
