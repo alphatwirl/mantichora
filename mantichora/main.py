@@ -1,11 +1,14 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 from __future__ import print_function
-import collections
 
 from .hub import MultiprocessingDropbox
 
 ##__________________________________________________________________||
-TaskPackage = collections.namedtuple('TaskPackage', 'task args kwargs')
+class TaskPackage(object):
+    def __init__(self, task, args, kwargs):
+        self.task = task
+        self.args = args
+        self.kwargs = kwargs
 
 ##__________________________________________________________________||
 class mantichora(object):
