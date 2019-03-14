@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.3...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.4...master))
+
+## [0.9.4] - 2019-03-14
+
+**PyPI**: https://pypi.org/project/mantichora/0.9.3/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.3...v0.9.4))
 - updated `README.md`, docstrings
 - cleaned up code
 
