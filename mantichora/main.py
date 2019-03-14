@@ -58,8 +58,8 @@ class mantichora(object):
         int
             run ID
         """
-        package = TaskPackage(task=func, args=args, kwargs=kwargs)
-        return self.dropbox.put(package)
+        task_func = TaskPackage(task=func, args=args, kwargs=kwargs)
+        return self.dropbox.put(task_func)
 
     def returns(self):
         """return a list of return values of the task functions
