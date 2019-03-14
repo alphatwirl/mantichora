@@ -45,9 +45,8 @@ class Worker(multiprocessing.Process):
                 self.task_queue.task_done()
                 break
             task_idx, package = message
-            result = package.task(*package.args, **package.kwargs)
+            result = package()
             self.task_queue.task_done()
             self.result_queue.put((task_idx, result))
-
 
 ##__________________________________________________________________||
