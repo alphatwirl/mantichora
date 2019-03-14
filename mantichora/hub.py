@@ -163,13 +163,7 @@ class MultiprocessingDropbox(object):
     def poll(self):
         """Return pairs of task indices and results of finished tasks.
         """
-
-        messages = self._receive_finished()
-
-        # sort in the order of task_idx
-        messages = sorted(messages, key=itemgetter(0))
-
-        return messages
+        return self._receive_finished()
 
     def receive(self):
         """Return pairs of task indices and results.
