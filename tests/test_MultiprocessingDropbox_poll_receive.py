@@ -1,62 +1,10 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import os
 import time
-import collections
+import functools
 
 import pytest
 
-try:
-    import unittest.mock as mock
-except ImportError:
-    import mock
-
 from mantichora.hub import MultiprocessingDropbox
-from mantichora.main import TaskPackage
-
-##__________________________________________________________________||
-MockResult = collections.namedtuple('MockResult', 'name args kwargs')
-
-class MockTask(object):
-    def __init__(self, name, time):
-        self.name = name
-        self.time = time
-
-    def __call__(self, *args, **kwargs):
-        time.sleep(self.time)
-        return MockResult(name=self.name, args=args, kwargs=kwargs)
-
-##__________________________________________________________________||
-@pytest.fixture()
-def package1():
-    task = MockTask(name='task1', time=0.010)
-    args = (111, 222)
-    kwargs = dict(A='abc', B='def')
-    return TaskPackage(task=task, args=args, kwargs=kwargs)
-
-@pytest.fixture()
-def package2():
-    task = MockTask(name='task2', time=0.001)
-    args = ( )
-    kwargs = { }
-    return TaskPackage(task=task, args=args, kwargs=kwargs)
-
-@pytest.fixture()
-def package3():
-    task = MockTask(name='task3', time=0.005)
-    args = (33, 44)
-    kwargs = { }
-    return TaskPackage(task=task, args=args, kwargs=kwargs)
-
-@pytest.fixture()
-def package4():
-    task = MockTask(name='task4', time=0.002)
-    args = ( )
-    kwargs = dict(ABC='abc', DEF='def')
-    return TaskPackage(task=task, args=args, kwargs=kwargs)
-
-@pytest.fixture()
-def packages(package1, package2, package3, package4):
-    return [package1, package2, package3, package4]
 
 ##__________________________________________________________________||
 @pytest.fixture()
@@ -67,12 +15,22 @@ def obj():
     ret.terminate()
     ret.close()
 
+def task(sleep, ret):
+    time.sleep(sleep)
+    return ret
+
 @pytest.fixture()
-def expected(obj, packages):
-    pkgidxs = obj.put_multiple(packages)
+def expected(obj):
+    idx1 = obj.put(functools.partial(task, 0.010, 'result1'))
+    idx2 = obj.put(functools.partial(task, 0.001, 'result2'))
+    idx3 = obj.put(functools.partial(task, 0.005, 'result3'))
+    idx4 = obj.put(functools.partial(task, 0.002, 'result4'))
     ret = [
-        (i, MockResult(name=p.task.name, args=p.args, kwargs=p.kwargs))
-        for i, p in zip(pkgidxs, packages)]
+        (idx1, 'result1'),
+        (idx2, 'result2'),
+        (idx3, 'result3'),
+        (idx4, 'result4'),
+    ]
     ret = sorted(ret)
     return ret
 
