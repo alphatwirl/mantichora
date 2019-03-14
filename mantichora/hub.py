@@ -22,7 +22,7 @@ def logger_thread(queue):
 
 ##__________________________________________________________________||
 class MultiprocessingDropbox(object):
-    """A drop box for task packages.
+    """A drop box for tasks.
 
     The tasks will be executed in multiprocessing
 
@@ -100,10 +100,15 @@ class MultiprocessingDropbox(object):
             worker.start()
             self.workers.append(worker)
 
-    def put(self, package):
-        """put a task package
+    def put(self, task_func):
+        """put a task
 
         The task will be executed in a background process
+
+        Parameters
+        ----------
+        task_func : callable
+            a task function
 
         Returns
         -------
@@ -112,14 +117,19 @@ class MultiprocessingDropbox(object):
 
         """
         self.task_idx += 1
-        self.task_queue.put((self.task_idx, package))
+        self.task_queue.put((self.task_idx, task_func))
         self.n_ongoing_tasks += 1
         return self.task_idx
 
-    def put_multiple(self, packages):
-        """put a list of task packages
+    def put_multiple(self, task_funcs):
+        """put a list of tasks
 
         The tasks will be executed in background processes
+
+        Parameters
+        ----------
+        task_funcs : list
+            a list of task functions
 
         Returns
         -------
@@ -128,19 +138,19 @@ class MultiprocessingDropbox(object):
 
         """
         task_idxs = [ ]
-        for package in packages:
-            task_idxs.append(self.put(package))
+        for t in task_funcs:
+            task_idxs.append(self.put(t))
         return task_idxs
 
     def receive_one(self):
-        """return a pair of the package index and result of a task
+        """return a pair of the task index and result of a task
 
         This method waits until a task finishes.
 
         Returns
         -------
         list or None
-            a pair of the package index and result of a task.
+            a pair of the task index and result of a task.
             `None` if no tasks are outstanding.
 
         """
