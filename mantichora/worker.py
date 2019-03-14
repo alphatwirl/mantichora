@@ -1,7 +1,6 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import multiprocessing
 import logging
-# import logging.handlers
 
 try:
     from logging.handlers import QueueHandler
@@ -44,8 +43,8 @@ class Worker(multiprocessing.Process):
             if message is None:
                 self.task_queue.task_done()
                 break
-            task_idx, package = message
-            result = package()
+            task_idx, task_func = message
+            result = task_func()
             self.task_queue.task_done()
             self.result_queue.put((task_idx, result))
 
