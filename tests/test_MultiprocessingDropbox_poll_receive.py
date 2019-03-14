@@ -11,7 +11,7 @@ except ImportError:
     import mock
 
 from mantichora.hub import MultiprocessingDropbox
-from mantichora.hub import TaskPackage
+from mantichora.main import TaskPackage
 
 ##__________________________________________________________________||
 MockResult = collections.namedtuple('MockResult', 'name args kwargs')

@@ -3,7 +3,6 @@ from __future__ import print_function
 import logging
 import multiprocessing
 import threading
-import collections
 
 from operator import itemgetter
 
@@ -20,9 +19,6 @@ def logger_thread(queue):
             break
         logger = logging.getLogger(record.name)
         logger.handle(record)
-
-##__________________________________________________________________||
-TaskPackage = collections.namedtuple('TaskPackage', 'task args kwargs')
 
 ##__________________________________________________________________||
 class MultiprocessingDropbox(object):
