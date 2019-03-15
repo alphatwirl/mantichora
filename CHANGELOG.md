@@ -4,9 +4,15 @@
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.4...master))
 
+## [0.9.5] - 2019-03-15
+
+**PyPI**: https://pypi.org/project/mantichora/0.9.5/
+- updated `README.md`, `setup.py`
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.4...v0.9.5))
 ## [0.9.4] - 2019-03-14
 
-**PyPI**: https://pypi.org/project/mantichora/0.9.3/
+**PyPI**: https://pypi.org/project/mantichora/0.9.4/
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.3...v0.9.4))
 - updated `README.md`, docstrings
