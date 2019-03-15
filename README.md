@@ -68,7 +68,6 @@ The examples in this file can be also run on Jupyter Notebook. <br />
 ## Requirement
 
 - Python 2.7, 3.6, or 3.7
-- [atpbar](https://github.com/alphatwirl/atpbar) >= 1.0.2
 
 *****
 
