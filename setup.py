@@ -29,6 +29,6 @@ setup(
     ],
     packages=find_packages(exclude=['docs', 'tests']),
     install_requires=[
-        'atpbar>=1.0.2'
+        'atpbar>=1.0.3'
     ]
 )
