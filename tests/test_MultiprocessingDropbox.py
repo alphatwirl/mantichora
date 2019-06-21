@@ -11,19 +11,26 @@ def test_init_raise():
     with pytest.raises(ValueError):
         MultiprocessingHub(nprocesses=0)
 
-def test_open_close():
-    obj = MultiprocessingHub()
+##__________________________________________________________________||
+Hubs = [MultiprocessingHub]
+
+##__________________________________________________________________||
+@pytest.mark.parametrize('Hub', Hubs)
+def test_open_close(Hub):
+    obj = Hub()
     obj.open()
     obj.close()
 
-def test_open_open_close():
-    obj = MultiprocessingHub()
+@pytest.mark.parametrize('Hub', Hubs)
+def test_open_open_close(Hub):
+    obj = Hub()
     obj.open()
     obj.open() # don't create workers again
     obj.close()
 
-def test_repr():
-    obj = MultiprocessingHub()
+@pytest.mark.parametrize('Hub', Hubs)
+def test_repr(Hub):
+    obj = Hub()
     repr(obj)
 
 ##__________________________________________________________________||
@@ -32,9 +39,9 @@ def task(sleep, ret):
     return ret
 
 ##__________________________________________________________________||
-@pytest.fixture()
-def obj():
-    ret = MultiprocessingHub()
+@pytest.fixture(params=Hubs)
+def obj(request):
+    ret = request.param()
     ret.open()
     yield ret
     ret.terminate()

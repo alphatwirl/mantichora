@@ -6,12 +6,16 @@ import pytest
 from mantichora.hubmp import MultiprocessingHub
 
 ##__________________________________________________________________||
+Hubs = [MultiprocessingHub]
+
+##__________________________________________________________________||
 def task():
     logging.info('doing task')
 
 ##__________________________________________________________________||
-def test_put(caplog):
-    obj = MultiprocessingHub()
+@pytest.mark.parametrize('Hub', Hubs)
+def test_put(Hub, caplog):
+    obj = Hub()
     obj.open()
     with caplog.at_level(logging.INFO):
         obj.put(task)

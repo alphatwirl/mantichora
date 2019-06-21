@@ -7,9 +7,12 @@ import pytest
 from mantichora.hubmp import MultiprocessingHub
 
 ##__________________________________________________________________||
-@pytest.fixture()
-def obj():
-    ret = MultiprocessingHub()
+Hubs = [MultiprocessingHub]
+
+##__________________________________________________________________||
+@pytest.fixture(params=Hubs)
+def obj(request):
+    ret = request.param()
     ret.open()
     yield ret
     ret.terminate()
