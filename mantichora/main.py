@@ -31,8 +31,8 @@ class mantichora(object):
     """
 
     def __init__(self, nworkers=4):
-        self.dropbox = MultiprocessingHub(nprocesses=nworkers, progressbar=True)
-        self.dropbox.open()
+        self.hub = MultiprocessingHub(nprocesses=nworkers, progressbar=True)
+        self.hub.open()
 
     def __enter__(self):
         return self
@@ -59,7 +59,7 @@ class mantichora(object):
             run ID
         """
         task_func = TaskPackage(task=func, args=args, kwargs=kwargs)
-        return self.dropbox.put(task_func)
+        return self.hub.put(task_func)
 
     def returns(self):
         """return a list of return values of the task functions
@@ -90,7 +90,7 @@ class mantichora(object):
             `None` if no task functions are outstanding.
 
         """
-        return self.dropbox.receive_one()
+        return self.hub.receive_one()
 
     def receive_finished(self):
         """return pairs of the run IDs and return values of finished task function
@@ -104,21 +104,21 @@ class mantichora(object):
             `None` if no task functions are outstanding.
 
         """
-        return self.dropbox.poll()
+        return self.hub.poll()
 
     def receive_all(self):
-        return self.dropbox.receive()
+        return self.hub.receive()
 
     def terminate(self):
         """terminate
 
         """
-        self.dropbox.terminate()
+        self.hub.terminate()
 
     def end(self):
         """end
 
         """
-        self.dropbox.close()
+        self.hub.close()
 
 ##__________________________________________________________________||
