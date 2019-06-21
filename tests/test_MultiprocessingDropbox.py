@@ -4,7 +4,7 @@ import functools
 
 import pytest
 
-from mantichora.hub import MultiprocessingHub
+from mantichora.hubmp import MultiprocessingHub
 
 ##__________________________________________________________________||
 def test_init_raise():

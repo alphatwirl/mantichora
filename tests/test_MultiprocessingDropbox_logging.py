@@ -3,7 +3,7 @@ import logging
 
 import pytest
 
-from mantichora.hub import MultiprocessingHub
+from mantichora.hubmp import MultiprocessingHub
 
 ##__________________________________________________________________||
 def task():

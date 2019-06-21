@@ -1,7 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 from __future__ import print_function
 
-from .hub import MultiprocessingHub
+from .hubmp import MultiprocessingHub
 
 ##__________________________________________________________________||
 class TaskPackage(object):
