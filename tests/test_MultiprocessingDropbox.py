@@ -4,26 +4,26 @@ import functools
 
 import pytest
 
-from mantichora.hub import MultiprocessingDropbox
+from mantichora.hub import MultiprocessingHub
 
 ##__________________________________________________________________||
 def test_init_raise():
     with pytest.raises(ValueError):
-        MultiprocessingDropbox(nprocesses=0)
+        MultiprocessingHub(nprocesses=0)
 
 def test_open_close():
-    obj = MultiprocessingDropbox()
+    obj = MultiprocessingHub()
     obj.open()
     obj.close()
 
 def test_open_open_close():
-    obj = MultiprocessingDropbox()
+    obj = MultiprocessingHub()
     obj.open()
     obj.open() # don't create workers again
     obj.close()
 
 def test_repr():
-    obj = MultiprocessingDropbox()
+    obj = MultiprocessingHub()
     repr(obj)
 
 ##__________________________________________________________________||
@@ -34,7 +34,7 @@ def task(sleep, ret):
 ##__________________________________________________________________||
 @pytest.fixture()
 def obj():
-    ret = MultiprocessingDropbox()
+    ret = MultiprocessingHub()
     ret.open()
     yield ret
     ret.terminate()

@@ -3,7 +3,7 @@ import logging
 
 import pytest
 
-from mantichora.hub import MultiprocessingDropbox
+from mantichora.hub import MultiprocessingHub
 
 ##__________________________________________________________________||
 def task():
@@ -11,7 +11,7 @@ def task():
 
 ##__________________________________________________________________||
 def test_put(caplog):
-    obj = MultiprocessingDropbox()
+    obj = MultiprocessingHub()
     obj.open()
     with caplog.at_level(logging.INFO):
         obj.put(task)

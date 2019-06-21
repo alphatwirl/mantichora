@@ -4,12 +4,12 @@ import functools
 
 import pytest
 
-from mantichora.hub import MultiprocessingDropbox
+from mantichora.hub import MultiprocessingHub
 
 ##__________________________________________________________________||
 @pytest.fixture()
 def obj():
-    ret = MultiprocessingDropbox()
+    ret = MultiprocessingHub()
     ret.open()
     yield ret
     ret.terminate()

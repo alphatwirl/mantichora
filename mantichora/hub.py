@@ -21,7 +21,7 @@ def logger_thread(queue):
         logger.handle(record)
 
 ##__________________________________________________________________||
-class MultiprocessingDropbox(object):
+class MultiprocessingHub(object):
     """A drop box for tasks.
 
     The tasks will be executed in multiprocessing

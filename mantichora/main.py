@@ -1,7 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 from __future__ import print_function
 
-from .hub import MultiprocessingDropbox
+from .hub import MultiprocessingHub
 
 ##__________________________________________________________________||
 class TaskPackage(object):
@@ -31,7 +31,7 @@ class mantichora(object):
     """
 
     def __init__(self, nworkers=4):
-        self.dropbox = MultiprocessingDropbox(nprocesses=nworkers, progressbar=True)
+        self.dropbox = MultiprocessingHub(nprocesses=nworkers, progressbar=True)
         self.dropbox.open()
 
     def __enter__(self):
