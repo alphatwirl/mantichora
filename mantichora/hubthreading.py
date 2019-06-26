@@ -4,6 +4,8 @@ import queue
 
 from operator import itemgetter
 
+import atpbar
+
 ##__________________________________________________________________||
 class ThreadingHub(object):
     """A hub for Threading
@@ -137,6 +139,8 @@ class ThreadingHub(object):
         # sort in the order of task_idx
         messages = sorted(messages, key=itemgetter(0))
 
+        atpbar.flush()
+
         return messages
 
     def _receive_finished(self):
@@ -170,6 +174,8 @@ class ThreadingHub(object):
                 self.task_queue.put(None)
             self.task_queue.join()
             self.workers = [ ]
+
+        atpbar.flush()
 
 ##__________________________________________________________________||
 import logging
