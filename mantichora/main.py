@@ -31,7 +31,7 @@ class mantichora(object):
     """
 
     def __init__(self, nworkers=4):
-        self.hub = MultiprocessingHub(nprocesses=nworkers, progressbar=True)
+        self.hub = MultiprocessingHub(nworkers=nworkers, progressbar=True)
         self.hub.open()
 
     def __enter__(self):

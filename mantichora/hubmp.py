@@ -22,27 +22,25 @@ def logger_thread(queue):
 
 ##__________________________________________________________________||
 class MultiprocessingHub(object):
-    """A drop box for tasks.
-
-    The tasks will be executed in multiprocessing
+    """A hub for multiprocessing.
 
     Parameters
     ----------
-    nprocesses : int
+    nworkers : int
         The number of processes
     progressbar : bool
         Progress bars from atpbar can be used in spawned processes if
         True.
 
     """
-    def __init__(self, nprocesses=16, progressbar=True):
+    def __init__(self, nworkers=16, progressbar=True):
 
-        if nprocesses <= 0:
-            raise ValueError("nprocesses must be at least one: {} is given".format(nprocesses))
+        if nworkers <= 0:
+            raise ValueError("nworkers must be at least one: {} is given".format(nworkers))
 
         self.progressbar = progressbar
 
-        self.n_max_workers = nprocesses
+        self.n_max_workers = nworkers
         self.workers = [ ]
         self.task_queue = multiprocessing.JoinableQueue()
         self.result_queue = multiprocessing.Queue()
@@ -52,7 +50,7 @@ class MultiprocessingHub(object):
         self.task_idx = -1 # so it starts from 0
 
         self._repr_pairs = [
-            ('nprocesses', nprocesses),
+            ('nworkers', nworkers),
             ('progressbar', progressbar),
         ]
 

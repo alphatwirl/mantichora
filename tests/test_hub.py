@@ -7,14 +7,14 @@ import pytest
 from mantichora.hubmp import MultiprocessingHub
 
 ##__________________________________________________________________||
-def test_init_raise():
-    with pytest.raises(ValueError):
-        MultiprocessingHub(nprocesses=0)
-
-##__________________________________________________________________||
 Hubs = [MultiprocessingHub]
 
 ##__________________________________________________________________||
+@pytest.mark.parametrize('Hub', Hubs)
+def test_init_raise(Hub):
+    with pytest.raises(ValueError):
+        Hub(nworkers=0)
+
 @pytest.mark.parametrize('Hub', Hubs)
 def test_open_close(Hub):
     obj = Hub()
