@@ -264,6 +264,7 @@ def logger_thread(queue):
         if record is None:
             break
         logger = logging.getLogger(record.name)
-        logger.handle(record)
+        if logger.getEffectiveLevel() <= record.levelno:
+            logger.handle(record)
 
 ##__________________________________________________________________||
