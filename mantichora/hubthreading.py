@@ -1,6 +1,11 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import threading
-import queue
+
+try:
+    import queue
+except ImportError:
+    # Python 2.7
+    import Queue as queue
 
 from operator import itemgetter
 
