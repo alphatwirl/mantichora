@@ -1,5 +1,4 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-from __future__ import print_function
 import logging
 import multiprocessing
 import threading
@@ -12,16 +11,6 @@ except ImportError:
     from .queuehandler import QueueHandler
 
 import atpbar
-
-##__________________________________________________________________||
-# https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
-def logger_thread(queue):
-    while True:
-        record = queue.get()
-        if record is None:
-            break
-        logger = logging.getLogger(record.name)
-        logger.handle(record)
 
 ##__________________________________________________________________||
 class MultiprocessingHub(object):
@@ -48,7 +37,6 @@ class MultiprocessingHub(object):
         self.task_queue = multiprocessing.JoinableQueue()
         self.result_queue = multiprocessing.Queue()
         self.logging_queue = multiprocessing.Queue()
-        self.lock = multiprocessing.Lock()
         self.n_ongoing_tasks = 0
         self.task_idx = -1 # so it starts from 0
 
@@ -95,8 +83,7 @@ class MultiprocessingHub(object):
                 task_queue=self.task_queue,
                 result_queue=self.result_queue,
                 logging_queue=self.logging_queue,
-                progress_reporter=reporter,
-                lock=self.lock
+                progress_reporter=reporter
             )
             worker.start()
             self.workers.append(worker)
@@ -234,12 +221,11 @@ class MultiprocessingHub(object):
 ##__________________________________________________________________||
 class Worker(multiprocessing.Process):
     def __init__(self, task_queue, result_queue, logging_queue,
-                 lock, progress_reporter):
+                 progress_reporter):
         multiprocessing.Process.__init__(self)
         self.task_queue = task_queue
         self.result_queue = result_queue
         self.logging_queue = logging_queue
-        self.lock = lock
         self.progress_reporter = progress_reporter
 
     def run(self):
@@ -269,5 +255,15 @@ class Worker(multiprocessing.Process):
             result = task_func()
             self.task_queue.task_done()
             self.result_queue.put((task_idx, result))
+
+##__________________________________________________________________||
+# https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
+def logger_thread(queue):
+    while True:
+        record = queue.get()
+        if record is None:
+            break
+        logger = logging.getLogger(record.name)
+        logger.handle(record)
 
 ##__________________________________________________________________||
