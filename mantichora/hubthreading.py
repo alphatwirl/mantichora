@@ -148,21 +148,13 @@ class ThreadingHub(object):
         return messages
 
     def terminate(self):
-        """terminate running tasks
+        """terminate running tasks (not implemented)
 
         Returns
         -------
         None
         """
-
-        # for worker in self.workers:
-        #     worker.terminate()
-        # 
-        # # wait until all workers are terminated.
-        # while any([w.is_alive() for w in self.workers]):
-        #     pass
-        # 
-        # self.workers = [ ]
+        pass
 
     def close(self):
         """close the drop box
