@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.4...master))
+- cleaned code
+- fixed a bug in which the logging level were not effective
+- added a new class `ThreadingHub`
 
 ## [0.9.5] - 2019-03-15
 
