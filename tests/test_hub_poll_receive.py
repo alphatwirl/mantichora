@@ -5,9 +5,10 @@ import functools
 import pytest
 
 from mantichora.hubmp import MultiprocessingHub
+from mantichora.hubthreading import ThreadingHub
 
 ##__________________________________________________________________||
-Hubs = [MultiprocessingHub]
+Hubs = [MultiprocessingHub, ThreadingHub]
 
 ##__________________________________________________________________||
 @pytest.fixture(params=Hubs)
