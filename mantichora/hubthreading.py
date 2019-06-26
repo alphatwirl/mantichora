@@ -183,7 +183,6 @@ class ThreadingHub(object):
         atpbar.flush()
 
 ##__________________________________________________________________||
-import logging
 class Worker(threading.Thread):
     def __init__(self, task_queue, result_queue):
         threading.Thread.__init__(self)
@@ -191,7 +190,6 @@ class Worker(threading.Thread):
         self.result_queue = result_queue
 
     def run(self):
-        # self._configure_logger()
         try:
             self._run_tasks()
         except KeyboardInterrupt:
