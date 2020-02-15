@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.4...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.6...master))
+
+## [0.9.6] - 2020-02-15
+
+**PyPI**: https://pypi.org/project/mantichora/0.9.6/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.5...v0.9.6))
 - cleaned code
 - fixed a bug in which the logging level were not effective
 - added a new class `ThreadingHub`
@@ -11,14 +17,14 @@
 
 **PyPI**: https://pypi.org/project/mantichora/0.9.5/
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.4...v0.9.5))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.4...v0.9.5))
 - updated `README.md`, `setup.py`
 
 ## [0.9.4] - 2019-03-14
 
 **PyPI**: https://pypi.org/project/mantichora/0.9.4/
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.3...v0.9.4))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.3...v0.9.4))
 - updated `README.md`, docstrings
 - cleaned up code
 
@@ -26,7 +32,7 @@
 
 **PyPI**: https://pypi.org/project/mantichora/0.9.3/
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.2...v0.9.3))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.2...v0.9.3))
 - added `receive_one()`, `receive_finished()`
 - changed the behavior:
     - `mantichora` no longer waits all tasks to finish at exit of the
@@ -39,14 +45,14 @@
 
 **PyPI**: https://pypi.org/project/mantichora/0.9.2/
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.1...v0.9.2))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.1...v0.9.2))
 - updated `README.md`
 
 ## [0.9.1] - 2019-03-02
 
 **PyPI**: https://pypi.org/project/mantichora/0.9.1/
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.0...v0.9.1))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.0...v0.9.1))
 - updated the development status to Beta in `setup.py`
 - updated `README.md`
 
