@@ -6,9 +6,9 @@ matrix:
     include:
         - python: 2.7
         - python: 3.6
-        - python: 3.7-dev
+        - python: 3.7
+        - python: 3.8
     allow_failures:
-        - python: 3.7-dev
 
 install:
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then curl --silent http://repo.continuum.io/miniconda/Miniconda-latest-MacOSX-x86_64.sh -o miniconda.sh; fi
@@ -44,5 +44,5 @@ deploy:
     secure: lsFXZu2nOw0K3UGyHIGm8NPLB68xNOTOrjt4q3IDN8bpZgXK9kCvqyzsfjbQJm++lOTmn6U8Gy56KntrYTfeTEimFNvO9EXEZW+vW6LBiv9fuk5es2v3g7fqI9Ogb78OF4o2DX6Yei68OIWq/5bkcko1zwui0P72daeZX9EE9xgmFW152hoDjk4Pdreke2duPoS/151TcDo/jSpLg3chqidEyd2s7m+kijhUESVto9Jw1U+XeIhuk1vo8Qs58UmFFp5BxR0bAa3XOrS6opb04EFAzhLIe7o/Gqhlax9vn3en8Zl9ETZNeeGwYXGuQ18ojWBb5DGvzD+qZFyqvJmb9WLgSBlxSgji503EW+ldaZsNYT25A82z4PnzXtrDyyMS70ofzw8YdD4c17M6zHpnY+kONjUOCLBG9XDKt5W8Ar5Og7wT6VD32fIT1e/h4oeLSDe59k6g1PtsaqRZpdB84HLTNTlU87TLCfcW22ScWSCqTY1oFbIUDgzkvPPKLBGccDb2oeneMSfCt5ZZD/vcyuKqiK4R+k4k/OcQCH2TztAsSQ1WbM1z+qsPZwOjK6S1HMtZQpUNVs6s3LFVwuWH65ZXuwAaVOw6S3mqsvdA/egr1XuzLTdCagEM3rdXCABEJXyDpznAcVx910+U0IQFyPegTiH3QYb2DAUJ0X8m5wA=
   on:
     tags: true
-    python: 3.6
+    python: 3.7
     condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
