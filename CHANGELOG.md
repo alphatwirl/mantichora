@@ -2,7 +2,14 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.6...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.7...master))
+
+## [0.9.7] - 2020-02-1
+
+**PyPI**: https://pypi.org/project/mantichora/0.9.7/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.6...v0.9.7))
+- added tests on Python 3.8 in Travis CI
 
 ## [0.9.6] - 2020-02-15
 
