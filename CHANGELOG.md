@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.7...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.8...master))
 
-## [0.9.7] - 2020-02-1
+## [0.9.8] - 2020-03-14
+
+**PyPI**: https://pypi.org/project/mantichora/0.9.8/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.7...v0.9.8))
+- stopped supporting Python 2.7
+- updated to use the "fork" multiprocessing start method, addressing the issue [#4](https://github.com/alphatwirl/mantichora/issues/4)
+
+## [0.9.7] - 2020-02-15
 
 **PyPI**: https://pypi.org/project/mantichora/0.9.7/
 
