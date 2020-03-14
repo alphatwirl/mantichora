@@ -13,6 +13,22 @@ except ImportError:
 import atpbar
 
 ##__________________________________________________________________||
+multiprocessing = multiprocessing.get_context('fork')
+# multiprocessing.set_start_method('fork')
+
+# Use "fork" as the start method.
+
+# The default start method was "fork" until Python 3.7. Since Python
+# 3.8, it changed to "spawn". The spawn method has more restriction on
+# how the main module is written*. Consequently, for example, the
+# script in the example dir (examples/example_01.py) doesn't run. The
+# restriction also makes it difficult to use mantichora in Jupyter
+# Notebook.
+#
+# * https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
+
+
+##__________________________________________________________________||
 class MultiprocessingHub(object):
     """A hub for multiprocessing.
 
