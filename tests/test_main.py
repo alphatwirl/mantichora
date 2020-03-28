@@ -29,16 +29,6 @@ def test_with():
         returns = mcore.returns()
         assert ['result 1', 'result 2', 'result 3'] == returns
 
-def test_with_terminate():
-    with mantichora() as mcore:
-        mcore.run(task, 10, 'result 1')
-        mcore.run(task, 12, 'result 2')
-        mcore.run(task, 15, 'result 3')
-
-        # Since `mcore.returns()` or any methods that wait for the
-        # tasks to finish are called, the `with` statement will exit
-        # quickly, at which the tasks will be terminated.
-
 ##__________________________________________________________________||
 class MyException(Exception):
     pass
