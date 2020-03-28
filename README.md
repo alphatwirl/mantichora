@@ -60,6 +60,7 @@ The examples in this file can be also run on Jupyter Notebook. <br />
             - [`receive_one()`](#receive_one)
             - [`receive_finished()`](#receive_finished)
         - [Logging](#logging)
+        - [Start method of multiprocessing](#start-method-of-multiprocessing)
 - [**License**](#license)
 - [**Contact**](#contact)
 
@@ -460,6 +461,32 @@ INFO:root:finishing "task3"
 INFO:root:finishing "task1"
 INFO:root:finishing "task4"
 ```
+
+*****
+
+#### Start method of multiprocessing
+
+Python multiprocessing has three start methods: `spawn`, `fork`, `forkserver`.
+Each method is described in the Python
+[documentation](https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods).
+Mantichora uses the `fork` method by default. You can change the method by the
+option `mp_start_method`. For example, to use the `spawn` method,
+
+```python
+mantichora(mp_start_method='spawn')
+```
+
+- On Jupyter Notebook, the `fork` method is typically the best choice.
+- The `spawn` and `forkserver` methods have extra restrictions, for
+  example, on how the main module is written. The restrictions are
+  described in the Python
+  [documentation](https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods).
+- On MacOS, in the `fork` method, errors with the message `may have
+  been in progress in another thread when fork() was called` might
+  occur. This error might be resolved if the environment variable
+  `OBJC_DISABLE_INITIALIZE_FORK_SAFETY` is set `YES` as suggested at
+  [Stack Overflow](https://stackoverflow.com/questions/50168647/multiprocessing-causes-python-to-crash-and-gives-an-error-may-have-been-in-progr).
+
 
 *****
 
