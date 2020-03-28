@@ -1,4 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+import time
 import logging
 import multiprocessing
 import threading
@@ -177,6 +178,7 @@ class MultiprocessingHub(object):
         messages = [ ] # a list of (task_idx, result)
         while self.n_ongoing_tasks >= 1:
             messages.extend(self._receive_finished())
+            time.sleep(0.0001)
 
         # sort in the order of task_idx
         messages = sorted(messages, key=itemgetter(0))
@@ -207,7 +209,7 @@ class MultiprocessingHub(object):
 
         # wait until all workers are terminated.
         while any([w.is_alive() for w in self.workers]):
-            pass
+            time.sleep(0.0001)
 
         self.workers = [ ]
 

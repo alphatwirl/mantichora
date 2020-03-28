@@ -1,4 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+import time
 import threading
 
 try:
@@ -140,6 +141,7 @@ class ThreadingHub(object):
         messages = [ ] # a list of (task_idx, result)
         while self.n_ongoing_tasks >= 1:
             messages.extend(self._receive_finished())
+            time.sleep(0.0001)
 
         # sort in the order of task_idx
         messages = sorted(messages, key=itemgetter(0))
