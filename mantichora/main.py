@@ -27,11 +27,29 @@ class mantichora(object):
     ----------
     nworkers : int, optional
         The number of workers, the default 4.
+    mp_start_method : str, 'fork', 'spawn','forkserver'
+        The starting method of multiprocessing. The default `fork`.
+        Each method is described in
+        https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods
+        In Jupyter Notebook, the 'fork' method is typically the best
+        choice.
+        The 'spawn' and "forkserver" have extra restrictions, for
+        example, on how the main module is written. The restrictions
+        are described at
+        https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
+        On MacOS, in the 'fork' method, errors with the message "may
+        have been in progress in another thread when fork() was
+        called" might occur. This error might be resolved if the
+        environment variable 'OBJC_DISABLE_INITIALIZE_FORK_SAFETY' is
+        set 'YES' as suggested in
+        https://stackoverflow.com/questions/50168647/multiprocessing-causes-python-to-crash-and-gives-an-error-may-have-been-in-progr
 
     """
 
-    def __init__(self, nworkers=4):
-        self.hub = MultiprocessingHub(nworkers=nworkers, progressbar=True)
+    def __init__(self, nworkers=4, mp_start_method='fork'):
+        self.hub = MultiprocessingHub(
+            nworkers=nworkers, progressbar=True,
+            mp_start_method=mp_start_method)
         self.hub.open()
 
     def __enter__(self):
