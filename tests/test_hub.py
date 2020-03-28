@@ -123,17 +123,6 @@ def test_begin_put_recive_end_repeat(obj):
     obj.put(functools.partial(task, 0.001, 'result2'))
     obj.receive()
 
-def test_terminate(obj):
-    obj.put(functools.partial(task, 0.010, 'result1'))
-    obj.put(functools.partial(task, 0.001, 'result2'))
-    obj.terminate()
-
-def test_terminate_close(obj):
-    obj.put(functools.partial(task, 0.010, 'result1'))
-    obj.put(functools.partial(task, 0.001, 'result2'))
-    obj.terminate()
-    obj.close()
-
 def test_receive_without_put(obj):
     assert [ ] == obj.receive()
 
