@@ -466,6 +466,8 @@ INFO:root:finishing "task4"
 
 #### Start method of multiprocessing
 
+*New in version 0.9.9*
+
 Python multiprocessing has three start methods: `spawn`, `fork`, `forkserver`.
 Each method is described in the Python
 [documentation](https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods).
