@@ -12,8 +12,17 @@ def task_perpetual(ret):
     return ret
 
 ##__________________________________________________________________||
-def test_with_terminate():
-    with mantichora() as mcore:
+params = [
+    pytest.param(dict(mode='multiprocessing', mp_start_method='fork'), id='multiprocessing-fork'),
+    pytest.param(dict(mode='multiprocessing', mp_start_method='spawn'), id='multiprocessing-spawn'),
+    pytest.param(dict(mode='multiprocessing', mp_start_method='forkserver'), id='multiprocessing-forkserver'),
+    # pytest.param(dict(mode='threading'), id='threading')
+]
+
+##__________________________________________________________________||
+@pytest.mark.parametrize('kwargs', params)
+def test_with_terminate(kwargs):
+    with mantichora(**kwargs) as mcore:
         mcore.run(task_perpetual, 'result 1')
         mcore.run(task_perpetual, 'result 2')
         mcore.run(task_perpetual, 'result 3')
