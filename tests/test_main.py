@@ -11,8 +11,17 @@ def task(sleep, ret):
     return ret
 
 ##__________________________________________________________________||
-def test_end():
-    mcore = mantichora()
+params = [
+    pytest.param(dict(mode='multiprocessing', mp_start_method='fork'), id='multiprocessing-fork'),
+    pytest.param(dict(mode='multiprocessing', mp_start_method='spawn'), id='multiprocessing-spawn'),
+    pytest.param(dict(mode='multiprocessing', mp_start_method='forkserver'), id='multiprocessing-forkserver'),
+    pytest.param(dict(mode='threading'), id='threading')
+]
+
+##__________________________________________________________________||
+@pytest.mark.parametrize('kwargs', params)
+def test_end(kwargs):
+    mcore = mantichora(**kwargs)
     mcore.run(task, 0.05, 'result 1')
     mcore.run(task, 0.01, 'result 2')
     mcore.run(task, 0.02, 'result 3')
@@ -21,39 +30,32 @@ def test_end():
     mcore.end()
 
 ##__________________________________________________________________||
-def test_with():
-    with mantichora() as mcore:
+@pytest.mark.parametrize('kwargs', params)
+def test_with(kwargs):
+    with mantichora(**kwargs) as mcore:
         mcore.run(task, 0.05, 'result 1')
         mcore.run(task, 0.01, 'result 2')
         mcore.run(task, 0.02, 'result 3')
         returns = mcore.returns()
         assert ['result 1', 'result 2', 'result 3'] == returns
 
-def test_with_terminate():
-    with mantichora() as mcore:
-        mcore.run(task, 10, 'result 1')
-        mcore.run(task, 12, 'result 2')
-        mcore.run(task, 15, 'result 3')
-
-        # Since `mcore.returns()` or any methods that wait for the
-        # tasks to finish are called, the `with` statement will exit
-        # quickly, at which the tasks will be terminated.
-
 ##__________________________________________________________________||
 class MyException(Exception):
     pass
 
-def test_with_raise():
+@pytest.mark.parametrize('kwargs', params)
+def test_with_raise(kwargs):
     with pytest.raises(MyException):
-        with mantichora() as mcore:
+        with mantichora(**kwargs) as mcore:
             mcore.run(task, 0.05, 'result 1')
             mcore.run(task, 0.01, 'result 2')
             mcore.run(task, 0.02, 'result 3')
             raise MyException
 
 ##__________________________________________________________________||
-def test_receive_one():
-    with mantichora() as mcore:
+@pytest.mark.parametrize('kwargs', params)
+def test_receive_one(kwargs):
+    with mantichora(**kwargs) as mcore:
         runids = [
             mcore.run(task, 0.05, 'result 1'),
             mcore.run(task, 0.01, 'result 2'),
@@ -73,8 +75,9 @@ def test_receive_one():
     assert sorted(expected) == sorted(pairs)
 
 ##__________________________________________________________________||
-def test_receive_finished():
-    with mantichora() as mcore:
+@pytest.mark.parametrize('kwargs', params)
+def test_receive_finished(kwargs):
+    with mantichora(**kwargs) as mcore:
         runids = [
             mcore.run(task, 0.05, 'result 1'),
             mcore.run(task, 0.01, 'result 2'),

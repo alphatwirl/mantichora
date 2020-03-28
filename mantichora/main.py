@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 from .hubmp import MultiprocessingHub
+from .hubthreading import ThreadingHub
 
 ##__________________________________________________________________||
 class TaskPackage(object):
@@ -27,16 +28,27 @@ class mantichora(object):
     ----------
     nworkers : int, optional
         The number of workers, the default 4.
-    mp_start_method : str, 'fork', 'spawn','forkserver'
+
+    mode : str, 'multiprocessing' or 'threading'
+        The mode of concurrency. The default 'multiprocessing'.
+
+        New in version 0.10.0
+
+    mp_start_method : str, 'fork', 'spawn', or 'forkserver'
         The start method of multiprocessing. The default `fork`.
         Each method is described in
         https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods
+
+        This option is only relevant for the =multiprocessing mode.
+
         On Jupyter Notebook, the 'fork' method is typically the best
         choice.
+
         The 'spawn' and "forkserver" have extra restrictions, for
         example, on how the main module is written. The restrictions
         are described at
         https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
+
         On MacOS, in the 'fork' method, errors with the message "may
         have been in progress in another thread when fork() was
         called" might occur. This error might be resolved if the
@@ -44,12 +56,21 @@ class mantichora(object):
         set 'YES' as suggested in
         https://stackoverflow.com/questions/50168647/multiprocessing-causes-python-to-crash-and-gives-an-error-may-have-been-in-progr
 
+        New in version 0.9.9
+
     """
 
-    def __init__(self, nworkers=4, mp_start_method='fork'):
-        self.hub = MultiprocessingHub(
-            nworkers=nworkers, progressbar=True,
-            mp_start_method=mp_start_method)
+    def __init__(self, nworkers=4, mode='multiprocessing', mp_start_method='fork'):
+        if mode == 'multiprocessing':
+            self.hub = MultiprocessingHub(
+                nworkers=nworkers, progressbar=True,
+                mp_start_method=mp_start_method)
+        elif mode == 'threading':
+            self.hub = ThreadingHub(nworkers=nworkers)
+        else:
+            raise ValueError(("'mode' must be "
+                              "'multiprocessing' or 'threading': "
+                              "'{}' is given").format(mode))
         self.hub.open()
 
     def __enter__(self):
