@@ -8,7 +8,16 @@ from mantichora.hubmp import MultiprocessingHub
 from mantichora.hubthreading import ThreadingHub
 
 ##__________________________________________________________________||
-Hubs = [MultiprocessingHub, ThreadingHub]
+mphub_fork = functools.partial(MultiprocessingHub, mp_start_method='fork')
+mphub_spawn = functools.partial(MultiprocessingHub, mp_start_method='spawn')
+mphub_forkserver = functools.partial(MultiprocessingHub, mp_start_method='forkserver')
+
+Hubs = [
+    pytest.param(mphub_fork, id='mp-fork'),
+    pytest.param(mphub_spawn, id='mp-spawn'),
+    pytest.param(mphub_forkserver, id='mp-forkserver'),
+    pytest.param(ThreadingHub, id='threading'),
+    ]
 
 ##__________________________________________________________________||
 @pytest.mark.parametrize('Hub', Hubs)

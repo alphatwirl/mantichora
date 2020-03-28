@@ -13,22 +13,6 @@ except ImportError:
 import atpbar
 
 ##__________________________________________________________________||
-multiprocessing = multiprocessing.get_context('fork')
-# multiprocessing.set_start_method('fork')
-
-# Use "fork" as the start method.
-
-# The default start method was "fork" until Python 3.7. Since Python
-# 3.8, it changed to "spawn". The spawn method has more restriction on
-# how the main module is written*. Consequently, for example, the
-# script in the example dir (examples/example_01.py) doesn't run. The
-# restriction also makes it difficult to use mantichora in Jupyter
-# Notebook.
-#
-# * https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
-
-
-##__________________________________________________________________||
 class MultiprocessingHub(object):
     """A hub for multiprocessing.
 
@@ -39,20 +23,49 @@ class MultiprocessingHub(object):
     progressbar : bool
         Progress bars from atpbar can be used in spawned processes if
         True.
+    mp_start_method : str, 'fork', 'spawn','forkserver'
+        The starting mode of multiprocessing. The default is `fork`.
+        Each mode is described at
+        https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods
+        In Jupyter Notebook, the 'fork' method is typically the best
+        choice. The 'spawn' and "forkserver" have extra restrictions,
+        for example, on how the main module is written. The
+        restrictions are described at
+        https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
+        On MacOS, in the 'fork' method, errors with the message "may
+        have been in progress in another thread when fork() was
+        called" might occur. This error might be resolved if the
+        environment variable 'OBJC_DISABLE_INITIALIZE_FORK_SAFETY' is
+        set 'YES' as suggested in
+        https://stackoverflow.com/questions/50168647/multiprocessing-causes-python-to-crash-and-gives-an-error-may-have-been-in-progr
 
     """
-    def __init__(self, nworkers=16, progressbar=True):
+    def __init__(self, nworkers=16, progressbar=True, mp_start_method='fork'):
 
         if nworkers <= 0:
             raise ValueError("nworkers must be at least one: {} is given".format(nworkers))
+
+        if mp_start_method == 'fork':
+            self.Worker = WorkerFork
+            self.ctx = ctx_fork
+        elif mp_start_method == 'spawn':
+            self.Worker = WorkerSpawn
+            self.ctx = ctx_spawn
+        elif mp_start_method == 'forkserver':
+            self.Worker = WorkerForkserver
+            self.ctx = ctx_forkserver
+        else:
+            raise ValueError(("'mp_start_method' must be one of "
+                              "'fork', 'spawn', 'forkserver': "
+                              "'{}' is given").format(mp_start_method))
 
         self.progressbar = progressbar
 
         self.n_max_workers = nworkers
         self.workers = [ ]
-        self.task_queue = multiprocessing.JoinableQueue()
-        self.result_queue = multiprocessing.Queue()
-        self.logging_queue = multiprocessing.Queue()
+        self.task_queue = self.ctx.JoinableQueue()
+        self.result_queue = self.ctx.Queue()
+        self.logging_queue = self.ctx.Queue()
         self.n_ongoing_tasks = 0
         self.task_idx = -1 # so it starts from 0
 
@@ -95,7 +108,7 @@ class MultiprocessingHub(object):
 
         # start workers
         for i in range(self.n_max_workers):
-            worker = Worker(
+            worker = self.Worker(
                 task_queue=self.task_queue,
                 result_queue=self.result_queue,
                 logging_queue=self.logging_queue,
@@ -235,10 +248,9 @@ class MultiprocessingHub(object):
             atpbar.flush()
 
 ##__________________________________________________________________||
-class Worker(multiprocessing.Process):
+class WorkerBase:
     def __init__(self, task_queue, result_queue, logging_queue,
                  progress_reporter):
-        multiprocessing.Process.__init__(self)
         self.task_queue = task_queue
         self.result_queue = result_queue
         self.logging_queue = logging_queue
@@ -271,6 +283,25 @@ class Worker(multiprocessing.Process):
             result = task_func()
             self.task_queue.task_done()
             self.result_queue.put((task_idx, result))
+
+ctx_fork = multiprocessing.get_context('fork')
+ctx_spawn = multiprocessing.get_context('spawn')
+ctx_forkserver = multiprocessing.get_context('forkserver')
+
+class WorkerFork(WorkerBase, ctx_fork.Process):
+    def __init__(self, *args, **kwargs):
+        ctx_fork.Process.__init__(self)
+        WorkerBase.__init__(self, *args, **kwargs)
+
+class WorkerSpawn(WorkerBase, ctx_spawn.Process):
+    def __init__(self, *args, **kwargs):
+        ctx_spawn.Process.__init__(self)
+        WorkerBase.__init__(self, *args, **kwargs)
+
+class WorkerForkserver(WorkerBase, ctx_forkserver.Process):
+    def __init__(self, *args, **kwargs):
+        ctx_forkserver.Process.__init__(self)
+        WorkerBase.__init__(self, *args, **kwargs)
 
 ##__________________________________________________________________||
 # https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
