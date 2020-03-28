@@ -28,10 +28,10 @@ class mantichora(object):
     nworkers : int, optional
         The number of workers, the default 4.
     mp_start_method : str, 'fork', 'spawn','forkserver'
-        The starting method of multiprocessing. The default `fork`.
+        The start method of multiprocessing. The default `fork`.
         Each method is described in
         https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods
-        In Jupyter Notebook, the 'fork' method is typically the best
+        On Jupyter Notebook, the 'fork' method is typically the best
         choice.
         The 'spawn' and "forkserver" have extra restrictions, for
         example, on how the main module is written. The restrictions
