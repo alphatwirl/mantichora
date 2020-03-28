@@ -2,7 +2,16 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.8...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.9...master))
+
+## [0.9.9] - 2020-03-28
+
+**PyPI**: https://pypi.org/project/mantichora/0.9.9/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.8...v0.9.9))
+- added option `mp_start_method`
+    - users can choose the [start method](https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods) of `multiprocessing` from three options: `fork`, `spawn`, and `forkserver`
+    - addressing the issue #4 comment [599216616](https://github.com/alphatwirl/mantichora/issues/4#issuecomment-599216616)
 
 ## [0.9.8] - 2020-03-14
 
