@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.9...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.10.0...master))
+## [0.10.0] - 2020-03-28
+
+**PyPI**: https://pypi.org/project/mantichora/0.10.0/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.9.9...v0.10.0))
+- added `threading` mode, which can be selected by new option `mode`
+- added brief sleeps in "while" loops, which improves performance in some circumstances
+- removed code for Python 2.7
 
 ## [0.9.9] - 2020-03-28
 
