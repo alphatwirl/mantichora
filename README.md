@@ -30,11 +30,14 @@ with mantichora() as mcore:
  
 You can simply give Mantichora as many functions as you need to run.
 Mantichora will run them concurrently in background processes by using
-multiprocessing or in different threads by using threading and give
-you the return values of the functions. The return values are sorted
-in the order of the functions you have originally given to Mantichora.
-Progress bars from [atpbar](https://github.com/alphatwirl/atpbar) can
-be used in the functions.
+[_multiprocessing_](https://docs.python.org/3/library/multiprocessing.html)
+or in different threads by
+[_threading_](https://docs.python.org/3/library/threading.html) and
+give you the return values of the functions. The return values are
+sorted in the order of the functions you have originally given to
+Mantichora. Progress bars from
+[atpbar](https://github.com/alphatwirl/atpbar) can be used in the
+functions.
 
 The code in this package was originally developed in the sub-package
 [_concurrently_](https://github.com/alphatwirl/alphatwirl/tree/v0.23.2/alphatwirl/concurrently)
@@ -210,27 +213,37 @@ in which the tasks have finished.
 print(results)
 ```
 
-```
+```python
 ['result1', 'result2', 'result3', 'result4', 'result5', 'result6']
 ```
- 
+
 *****
 
 ### Features
 
 #### Multiprocessing or Threading
-        
+
 *New in version 0.10.0*
 
-From version 0.10.0, you can choose
-[threading](https://docs.python.org/3/library/threading.html) in additional to
-[multiprocessing](https://docs.python.org/3/library/multiprocessing.html). The
-default is multiprocessing. Use the option `mode` to use threading.
+From version 0.10.0, you can choose to use
+[threading](https://docs.python.org/3/library/threading.html) instead
+of
+[multiprocessing](https://docs.python.org/3/library/multiprocessing.html)
+by setting the option `mode` to `threading` (the default is
+`multiprocessing`).
 
 ```python
-mantichora(mode='threading')
+with mantichora(mode='threading') as mcore:
+    mcore.run(task_loop, 'task', ret='result1')
+    mcore.run(task_loop, 'another task', ret='result2')
+    mcore.run(task_loop, 'still another task', ret='result3')
+    mcore.run(task_loop, 'yet another task', ret='result4')
+    mcore.run(task_loop, 'task again', ret='result5')
+    mcore.run(task_loop, 'more task', ret='result6')
+    results = mcore.returns()
 ```
 
+*****
 
 #### Without the `with` statement
 
@@ -299,6 +312,9 @@ The progress bars stop when the tasks are terminated.
 ```
 
 **Note:**: In the threading mode, `terminate()` does not do anything.
+If you initialize mantichora in the threading mode, i.e.,
+`mantichora(mode='threading')`, in the above example, all tasks run
+until completion.
 
 *****
 
@@ -347,7 +363,7 @@ have been given to `run()`.
 print(runids)
 ```
 
-```
+```python
 [0, 1, 2, 3, 4, 5]
 ```
 
@@ -357,7 +373,7 @@ The `pairs` are in the order in which the tasks have finished.
 print(pairs)
 ```
 
-```
+```python
 [(2, 'result3'), (0, 'result1'), (4, 'result5'), (5, 'result6'), (3, 'result4'), (1, 'result2')]
 ```
 
@@ -392,24 +408,24 @@ with mantichora() as mcore:
  100.00% :::::::::::::::::::::::::::::::::::::::: |     8325 /     8325 |:  task6
 ```
 
-The `runid` is again the list of the run IDs in the order of the tasks
+The `runid` is the list of the run IDs in the order of the tasks
 that have been given to `run()`.
 
 ```python
 print(runids)
 ```
 
-```
+```python
 [0, 1, 2, 3, 4, 5]
 ```
 
-The `pairs` are also again in the order in which the tasks have finished.
+The `pairs` are in the order in which the tasks have finished.
 
 ```python
 print(pairs)
 ```
 
-```
+```python
 [(2, 'result3'), (1, 'result2'), (0, 'result1'), (3, 'result4'), (4, 'result5'), (5, 'result6')]
 ```
 
@@ -417,13 +433,15 @@ print(pairs)
 
 #### Logging
 
-Logging in background processes is propagated to the main process in
-the way described in a [section of Logging
+In the multiprocessing mode, [logging](https://docs.python.org/3/library/logging.html)
+in background processes is propagated to the main process. The progagation
+is implemented in the way described in a [section of Logging
 Cookbook](https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes).
+
+**Note:** In the threading mode, logging just works because it is thread-safe.
 
 Here is a simple example task function that uses `logging`. The task
 function does logging just before returning.
-
 
 ```python
 import logging
@@ -466,12 +484,11 @@ with mantichora() as mcore:
 Logging made in the task function in background processes is sent to
 the main process and written in the string stream.
 
-
 ```python
 print(stream.getvalue())
 ```
 
-```
+```python
 INFO:root:finishing "task2"
 INFO:root:finishing "task3"
 INFO:root:finishing "task1"
@@ -484,14 +501,22 @@ INFO:root:finishing "task4"
 
 *New in version 0.9.9*
 
-Python multiprocessing has three start methods: `spawn`, `fork`, `forkserver`.
-Each method is described in the Python
+Python multiprocessing has three start methods: `spawn`, `fork`,
+`forkserver`. These methods are described in the Python
 [documentation](https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods).
-Mantichora uses the `fork` method by default. You can change the method by the
-option `mp_start_method`. For example, to use the `spawn` method,
+Mantichora uses the `fork` method by default. You can change the
+method by the option `mp_start_method`. For example, to use the
+`spawn` method,
 
 ```python
-mantichora(mp_start_method='spawn')
+with mantichora(mp_start_method='spawn') as mcore:
+    mcore.run(task_loop, 'task', ret='result1')
+    mcore.run(task_loop, 'another task', ret='result2')
+    mcore.run(task_loop, 'still another task', ret='result3')
+    mcore.run(task_loop, 'yet another task', ret='result4')
+    mcore.run(task_loop, 'task again', ret='result5')
+    mcore.run(task_loop, 'more task', ret='result6')
+    results = mcore.returns()
 ```
 
 - On Jupyter Notebook, the `fork` method is typically the best choice.
