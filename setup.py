@@ -12,7 +12,7 @@ setup(
     name='mantichora',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
-    description='A simple interface to multiprocessing',
+    description='A simple interface to multiprocessing and threading',
     long_description=long_description,
     long_description_content_type='text/markdown',
     author='Tai Sakuma',
