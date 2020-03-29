@@ -3,8 +3,9 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.10.0...master))
-- udpated `.travis.yml`
-
+- updated `.travis.yml`, `README.md`
+- removed `TaskPackage` replaced with `functools.partial`
+- removed code for Python 2.7
 
 ## [0.10.0] - 2020-03-28
 
