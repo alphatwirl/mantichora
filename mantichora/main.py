@@ -5,7 +5,7 @@ from .hubmp import MultiprocessingHub
 from .hubthreading import ThreadingHub
 
 ##__________________________________________________________________||
-class TaskPackage(object):
+class TaskPackage:
     """A task package
 
     Note: This class will be replaced with `functools.partial`
@@ -19,7 +19,7 @@ class TaskPackage(object):
         return self.task(*self.args, **self.kwargs)
 
 ##__________________________________________________________________||
-class mantichora(object):
+class mantichora:
     """A simple interface to multiprocessing
 
     https://github.com/alphatwirl/mantichora

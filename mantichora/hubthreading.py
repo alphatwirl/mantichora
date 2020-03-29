@@ -2,18 +2,14 @@
 import time
 import threading
 
-try:
-    import queue
-except ImportError:
-    # Python 2.7
-    import Queue as queue
+import queue
 
 from operator import itemgetter
 
 import atpbar
 
 ##__________________________________________________________________||
-class ThreadingHub(object):
+class ThreadingHub:
     """A hub for Threading
 
     Parameters

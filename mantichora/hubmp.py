@@ -6,15 +6,12 @@ import threading
 
 from operator import itemgetter
 
-try:
-    from logging.handlers import QueueHandler
-except ImportError:
-    from .queuehandler import QueueHandler
+from logging.handlers import QueueHandler
 
 import atpbar
 
 ##__________________________________________________________________||
-class MultiprocessingHub(object):
+class MultiprocessingHub:
     """A hub for multiprocessing.
 
     Parameters
