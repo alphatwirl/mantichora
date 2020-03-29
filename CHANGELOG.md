@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.10.0...master))
+- udpated `.travis.yml`
+
+
 ## [0.10.0] - 2020-03-28
 
 **PyPI**: https://pypi.org/project/mantichora/0.10.0/
