@@ -1,6 +1,4 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-from __future__ import print_function
-
 from .hubmp import MultiprocessingHub
 from .hubthreading import ThreadingHub
 
