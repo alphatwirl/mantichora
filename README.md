@@ -2,12 +2,13 @@
 
 # Mantichora
 
-A simple interface to _multiprocessing_
+A simple interface to _multiprocessing_ and _threading_
 
 *****
 
 _Mantichora_ provides a simple interface to
-[_multiprocessing_](https://docs.python.org/3/library/multiprocessing.html).
+[_multiprocessing_](https://docs.python.org/3/library/multiprocessing.html) and
+[_threading_](https://docs.python.org/3/library/threading.html).
 
 ```python
 from mantichora import mantichora
@@ -29,11 +30,11 @@ with mantichora() as mcore:
  
 You can simply give Mantichora as many functions as you need to run.
 Mantichora will run them concurrently in background processes by using
-multiprocessing and give you the return values of the functions. The
-return values are sorted in the order of the functions you have
-originally given to Mantichora. Progress bars from
-[atpbar](https://github.com/alphatwirl/atpbar) can be used in the
-functions.
+multiprocessing or in different threads by using threading and give
+you the return values of the functions. The return values are sorted
+in the order of the functions you have originally given to Mantichora.
+Progress bars from [atpbar](https://github.com/alphatwirl/atpbar) can
+be used in the functions.
 
 The code in this package was originally developed in the sub-package
 [_concurrently_](https://github.com/alphatwirl/alphatwirl/tree/v0.23.2/alphatwirl/concurrently)
@@ -53,6 +54,7 @@ The examples in this file can be also run on Jupyter Notebook. <br />
         - [Define a task function](#define-a-task-function)
         - [Run tasks concurrently with Mantichora](#run-tasks-concurrently-with-mantichora)
     - [**Features**](#features)
+        - [Multiprocessing or Threading](#multiprocessing-or-threading)
         - [Without the `with` statement](#without-the-with-statement)
             - [`end()`](#end)
             - [`terminate()`](#terminate)
@@ -125,11 +127,9 @@ times as the number randomly selected from between `1000` and
 two arguments: `name`, the label on the progress bar, and `ret`, the
 return value of the function.
 
-**Note:** Mantichora uses
-[multiprocessing](https://docs.python.org/3/library/multiprocessing.html)
-to run task functions in background processes. As a result, task
-functions, their arguments, and their return values need to be
-[picklable](https://docs.python.org/3.6/library/pickle.html#what-can-be-pickled-and-unpickled).
+**Note:** In the multiprocessing mode, the default mode of mantichora,
+task functions, their arguments, and their return values need to be
+[picklable](https://docs.python.org/3.8/library/pickle.html#what-can-be-pickled-and-unpickled).
 
 You can just try running this function without using Mantichora.
 
@@ -218,6 +218,20 @@ print(results)
 
 ### Features
 
+#### Multiprocessing or Threading
+        
+*New in version 0.10.0*
+
+From version 0.10.0, you can choose
+[threading](https://docs.python.org/3/library/threading.html) in additional to
+[multiprocessing](https://docs.python.org/3/library/multiprocessing.html). The
+default is multiprocessing. Use the option `mode` to use threading.
+
+```python
+mantichora(mode='threading')
+```
+
+
 #### Without the `with` statement
 
 ##### `end()`
@@ -252,10 +266,10 @@ print(results)
 
 ##### `terminate()`
 
-`mantichora` can be terminated with `terminate()`. After `terminate()`
-is called, `end()` still needs to be called. In the example below,
-`terminate()` is called after 0.5 seconds of sleep while some tasks
-are still running.
+In the multiprocessing mode, `mantichora` can be terminated with
+`terminate()`. After `terminate()` is called, `end()` still needs to
+be called. In the example below, `terminate()` is called after 0.5
+seconds of sleep while some tasks are still running.
 
 ```python
 mcore = mantichora()
@@ -283,6 +297,8 @@ The progress bars stop when the tasks are terminated.
    0.00%                                          |        0 /     9552 |:  task again
    0.00%                                          |        0 /     4898 |:  more task
 ```
+
+**Note:**: In the threading mode, `terminate()` does not do anything.
 
 *****
 
