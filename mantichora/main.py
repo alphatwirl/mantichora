@@ -6,7 +6,7 @@ from .hubthreading import ThreadingHub
 
 ##__________________________________________________________________||
 class mantichora:
-    """A simple interface to multiprocessing
+    """A simple interface to multiprocessing and threading
 
     https://github.com/alphatwirl/mantichora
 
@@ -133,10 +133,14 @@ class mantichora:
         return self.hub.poll()
 
     def receive_all(self):
+        """return pairs of the run IDs and return values of all tasks
+
+        This function is obsolete, to be deleted
+        """
         return self.hub.receive()
 
     def terminate(self):
-        """terminate
+        """terminate all tasks if possible
 
         """
         self.hub.terminate()
