@@ -1,20 +1,8 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+import functools
+
 from .hubmp import MultiprocessingHub
 from .hubthreading import ThreadingHub
-
-##__________________________________________________________________||
-class TaskPackage:
-    """A task package
-
-    Note: This class will be replaced with `functools.partial`
-
-    """
-    def __init__(self, task, args, kwargs):
-        self.task = task
-        self.args = args
-        self.kwargs = kwargs
-    def __call__(self):
-        return self.task(*self.args, **self.kwargs)
 
 ##__________________________________________________________________||
 class mantichora:
@@ -95,7 +83,8 @@ class mantichora:
         int
             run ID
         """
-        task_func = TaskPackage(task=func, args=args, kwargs=kwargs)
+        task_func = functools.partial(func, *args, **kwargs)
+
         return self.hub.put(task_func)
 
     def returns(self):
