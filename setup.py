@@ -29,6 +29,13 @@ setup(
     ],
     packages=find_packages(exclude=['docs', 'tests']),
     install_requires=[
-        'atpbar>=1.0.3'
-    ]
+        'atpbar>=1.0.8'
+    ],
+    extras_require={
+        'tests': [
+            'pytest>-5.4',
+            'pytest-cov>=2.8',
+            'pytest-console-scripts>=0.2',
+        ],
+    }
 )

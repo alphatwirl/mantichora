@@ -3,8 +3,8 @@
 branch = True
 concurrency = multiprocessing
 omit =
-     mantichora/_version.py
-     mantichora/queuehandler.py
+     */_version.py
+     */site-packages/*
 
 [report]
 # Regexes for lines to exclude from consideration
