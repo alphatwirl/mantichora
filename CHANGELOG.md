@@ -3,7 +3,8 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.10.0...master))
-- updated `.travis.yml`, `README.md`
+- updated `.travis.yml`, `.coveragerc`, `README.md`
+- moved the dependency list from `requirements` to `setup.py`
 - removed `TaskPackage` replaced with `functools.partial`
 - removed code for Python 2.7
 
