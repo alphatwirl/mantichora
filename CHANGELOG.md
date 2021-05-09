@@ -2,11 +2,19 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.10.0...master))
-- updated `.travis.yml`, `.coveragerc`, `README.md`
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.11.0...main))
+
+## [0.11.0] - 2021-05-09
+
+**PyPI**: https://pypi.org/project/mantichora/0.11.0/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.10.0...v0.11.0))
+- updated `.coveragerc`, `README.md`
 - moved the dependency list from `requirements` to `setup.py`
-- removed `TaskPackage` replaced with `functools.partial`
-- removed code for Python 2.7
+- removed `TaskPackage`, replaced with `functools.partial`
+- moved from Travis CI to GitHub Actions
+- added test on Python 3.9 in GitHub Actions
+- changed the default branch to "main"
 
 ## [0.10.0] - 2020-03-28
 
