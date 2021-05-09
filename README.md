@@ -1,4 +1,8 @@
-[![PyPI version](https://badge.fury.io/py/mantichora.svg)](https://badge.fury.io/py/mantichora) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/mantichora/badges/version.svg)](https://anaconda.org/conda-forge/mantichora) [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.2581882.svg)](https://doi.org/10.5281/zenodo.2581882) [![Build Status](https://travis-ci.org/alphatwirl/mantichora.svg?branch=master)](https://travis-ci.org/alphatwirl/mantichora) [![codecov](https://codecov.io/gh/alphatwirl/mantichora/branch/master/graph/badge.svg)](https://codecov.io/gh/alphatwirl/mantichora)
+[![PyPI version](https://badge.fury.io/py/mantichora.svg)](https://badge.fury.io/py/mantichora)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/mantichora/badges/version.svg)](https://anaconda.org/conda-forge/mantichora)
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.2581882.svg)](https://doi.org/10.5281/zenodo.2581882)
+[![Test Status](https://github.com/alphatwirl/mantichora/workflows/Test/badge.svg)](https://github.com/alphatwirl/mantichora/actions?query=workflow%3ATest)
+[![codecov](https://codecov.io/gh/alphatwirl/mantichora/branch/master/graph/badge.svg)](https://codecov.io/gh/alphatwirl/mantichora)
 
 # Mantichora
 
