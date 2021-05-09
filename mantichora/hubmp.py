@@ -47,9 +47,6 @@ class MultiprocessingHub:
 
         self.n_max_workers = nworkers
         self.workers = [ ]
-        self.task_queue = self.ctx.JoinableQueue()
-        self.result_queue = self.ctx.Queue()
-        self.logging_queue = self.ctx.Queue()
         self.n_ongoing_tasks = 0
         self.task_idx = -1 # so it starts from 0
 
@@ -77,6 +74,10 @@ class MultiprocessingHub:
         if len(self.workers) >= self.n_max_workers:
             # workers already created
             return
+
+        self.task_queue = self.ctx.JoinableQueue()
+        self.result_queue = self.ctx.Queue()
+        self.logging_queue = self.ctx.Queue()
 
         # start logging listener
         self.loggingListener = threading.Thread(
@@ -226,8 +227,16 @@ class MultiprocessingHub:
             self.workers = [ ]
 
         # end logging listener
-        self.logging_queue.put(None)
+        try:
+            self.logging_queue.put(None)
+        except ValueError:
+            # the queue is already closed
+            pass
         self.loggingListener.join()
+
+        self.task_queue.close()
+        self.result_queue.close()
+        self.logging_queue.close()
 
         if self.progressbar:
             atpbar.flush()
