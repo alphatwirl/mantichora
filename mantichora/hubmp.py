@@ -229,8 +229,10 @@ class MultiprocessingHub:
         # end logging listener
         try:
             self.logging_queue.put(None)
-        except ValueError:
+        except (AssertionError, ValueError):
             # the queue is already closed
+            # AssertionError: Python 3.7
+            # ValueError: Python 3.8+
             pass
         self.loggingListener.join()
 
