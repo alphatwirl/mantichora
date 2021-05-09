@@ -77,7 +77,7 @@ The examples in this file can be also run on Jupyter Notebook. <br />
 
 ## Requirement
 
-- Python 3.6, 3.7, or 3.8
+- Python 3.6, 3.7, 3.8, or 3.9
 
 *****
 
