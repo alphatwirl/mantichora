@@ -12,6 +12,9 @@ from logging.handlers import QueueHandler
 import atpbar
 
 ##__________________________________________________________________||
+MP_START_METHODS = ('fork', 'spawn', 'forkserver') # in the order of preferences as default
+
+##__________________________________________________________________||
 class WorkerBase:
     def __init__(self, task_queue, result_queue, logging_queue,
                  progress_reporter):
@@ -86,7 +89,6 @@ def define_worker_class(mp_start_method, ctx):
     )
     return worker_class
 
-MP_START_METHODS = ('fork', 'spawn', 'forkserver') # in the order of preferences as default
 mp_start_method_default = None
 mp_start_method_dict = {}
 
