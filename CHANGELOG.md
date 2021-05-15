@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.11.0...main))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.12.0...main))
+
+## [0.12.0] - 2021-05-15
+
+**PyPI**: https://pypi.org/project/mantichora/0.12.0/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/mantichora/compare/v0.11.0...v0.12.0))
+- addressed the issue [#5](https://github.com/alphatwirl/mantichora/issues/5)
+- added tests on Windows and macOS in GitHub Actions
 
 ## [0.11.0] - 2021-05-09
 
