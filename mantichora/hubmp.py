@@ -95,7 +95,12 @@ mp_start_method_dict = {}
 MpStartMethod = namedtuple('MpStartMethod', ['context', 'Worker'])
 
 for method in MP_START_METHODS:
-    ctx = multiprocessing.get_context(method)
+    try:
+        ctx = multiprocessing.get_context(method)
+    except ValueError:
+        continue
+    if mp_start_method_default is None:
+        mp_start_method_default = method
     Worker = define_worker_class(method, ctx)
     mp_start_method_dict[method] = MpStartMethod(context=ctx, Worker=Worker)
 
@@ -132,7 +137,7 @@ class MultiprocessingHub:
     mp_start_method : str, 'fork', 'spawn','forkserver'
 
     """
-    def __init__(self, nworkers=16, progressbar=True, mp_start_method='fork'):
+    def __init__(self, nworkers=16, progressbar=True, mp_start_method=mp_start_method_default):
 
         if nworkers <= 0:
             raise ValueError("nworkers must be at least one: {} is given".format(nworkers))
