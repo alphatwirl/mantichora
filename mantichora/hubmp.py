@@ -144,6 +144,8 @@ class MultiprocessingHub:
         if nworkers <= 0:
             raise ValueError("nworkers must be at least one: {} is given".format(nworkers))
 
+        if not availabe_mp_start_methods:
+            raise RuntimeError("No multiprocessing start methods available!")
 
         try:
             m = mp_start_method_dict[mp_start_method]
