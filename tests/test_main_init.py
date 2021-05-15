@@ -1,10 +1,11 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import pytest
 
+from mantichora.hubmp import available_mp_start_methods
 from mantichora import mantichora
 
 ##__________________________________________________________________||
-@pytest.mark.parametrize('mp_start_method', ['fork', 'spawn', 'forkserver'])
+@pytest.mark.parametrize('mp_start_method', available_mp_start_methods)
 def test_init_mp_start_method(mp_start_method):
     with mantichora(mp_start_method=mp_start_method):
         pass

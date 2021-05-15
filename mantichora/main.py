@@ -1,7 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import functools
 
-from .hubmp import MultiprocessingHub
+from .hubmp import MultiprocessingHub, mp_start_method_default
 from .hubthreading import ThreadingHub
 
 ##__________________________________________________________________||
@@ -46,7 +46,7 @@ class mantichora:
 
     """
 
-    def __init__(self, nworkers=4, mode='multiprocessing', mp_start_method='fork'):
+    def __init__(self, nworkers=4, mode='multiprocessing', mp_start_method=mp_start_method_default):
         if mode == 'multiprocessing':
             self.hub = MultiprocessingHub(
                 nworkers=nworkers, progressbar=True,

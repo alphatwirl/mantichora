@@ -5,10 +5,121 @@ import multiprocessing
 import threading
 
 from operator import itemgetter
+from collections import namedtuple
 
 from logging.handlers import QueueHandler
 
 import atpbar
+
+##__________________________________________________________________||
+MP_START_METHODS = ('fork', 'spawn', 'forkserver') # in the order of preferences as default
+
+##__________________________________________________________________||
+class WorkerBase:
+    def __init__(self, task_queue, result_queue, logging_queue,
+                 progress_reporter):
+        self.task_queue = task_queue
+        self.result_queue = result_queue
+        self.logging_queue = logging_queue
+        self.progress_reporter = progress_reporter
+
+    def run(self):
+        self._configure_logger()
+        self._configure_progressbar()
+        try:
+            self._run_tasks()
+        except KeyboardInterrupt:
+            pass
+
+    def _configure_logger(self):
+        handler = QueueHandler(self.logging_queue)
+        logger = logging.getLogger()
+        logger.setLevel(logging.DEBUG)
+        logger.addHandler(handler)
+
+    def _configure_progressbar(self):
+        atpbar.register_reporter(self.progress_reporter)
+
+    def _run_tasks(self):
+        while True:
+            message = self.task_queue.get()
+            if message is None:
+                self.task_queue.task_done()
+                break
+            task_idx, task_func = message
+            result = task_func()
+            self.task_queue.task_done()
+            self.result_queue.put((task_idx, result))
+
+def define_worker_class(mp_start_method, ctx):
+    """Define a worker class
+
+    e.g.,
+    class WorkerFork(WorkerBase, ctx.Process):
+        def __init__(self, *args, **kwargs):
+            ctx.Process.__init__(self)
+            WorkerBase.__init__(self, *args, **kwargs)
+
+    Parameters
+    ----------
+    mp_start_method : str
+        E.g., 'fork', 'spawn','forkserver'
+    ctx : object
+        A multiprocessing context.
+
+    Returns
+    -------
+    class
+
+    """
+
+    name = f'Worker{mp_start_method.capitalize()}'
+    # e.g., "WorkerFork", "WorkerSpawn", "WorkerForkserver"
+
+    bases = (WorkerBase, ctx.Process)
+
+    def init(self, *args, **kwargs):
+        ctx.Process.__init__(self)
+        WorkerBase.__init__(self, *args, **kwargs)
+
+    worker_class = type(
+        name,
+        bases,
+        { '__init__': init }
+    )
+    return worker_class
+
+def is_mp_start_method_available(method):
+    try:
+        multiprocessing.get_context(method)
+    except ValueError:
+        return False
+    return True
+
+available_mp_start_methods = tuple(m for m in MP_START_METHODS if is_mp_start_method_available(m))
+mp_start_method_default = available_mp_start_methods[0] if available_mp_start_methods else None
+
+
+MpStartMethod = namedtuple('MpStartMethod', ['context', 'Worker'])
+
+mp_start_method_dict = {}
+for method in available_mp_start_methods:
+    ctx = multiprocessing.get_context(method)
+    Worker = define_worker_class(method, ctx)
+    mp_start_method_dict[method] = MpStartMethod(context=ctx, Worker=Worker)
+    globals()[Worker.__name__] = Worker # for pickle to be able to find the class definition
+
+
+##__________________________________________________________________||
+# https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
+def logger_thread(queue):
+    while True:
+        record = queue.get()
+        if record is None:
+            break
+        logger = logging.getLogger(record.name)
+        if logger.getEffectiveLevel() <= record.levelno:
+            logger.handle(record)
 
 ##__________________________________________________________________||
 class MultiprocessingHub:
@@ -24,24 +135,24 @@ class MultiprocessingHub:
     mp_start_method : str, 'fork', 'spawn','forkserver'
 
     """
-    def __init__(self, nworkers=16, progressbar=True, mp_start_method='fork'):
+    def __init__(self, nworkers=16, progressbar=True, mp_start_method=mp_start_method_default):
 
         if nworkers <= 0:
             raise ValueError("nworkers must be at least one: {} is given".format(nworkers))
 
-        if mp_start_method == 'fork':
-            self.Worker = WorkerFork
-            self.ctx = ctx_fork
-        elif mp_start_method == 'spawn':
-            self.Worker = WorkerSpawn
-            self.ctx = ctx_spawn
-        elif mp_start_method == 'forkserver':
-            self.Worker = WorkerForkserver
-            self.ctx = ctx_forkserver
-        else:
-            raise ValueError(("'mp_start_method' must be one of "
-                              "'fork', 'spawn', 'forkserver': "
-                              "'{}' is given").format(mp_start_method))
+        if not available_mp_start_methods:
+            raise RuntimeError("No multiprocessing start methods available!")
+
+        try:
+            m = mp_start_method_dict[mp_start_method]
+        except KeyError:
+            raise ValueError((
+                f"Unknown mp_start_method: {mp_start_method!r}. "
+                f"Available methods: {available_mp_start_methods!r}. "
+            ))
+
+        self.Worker = m.Worker
+        self.ctx = m.context
 
         self.progressbar = progressbar
 
@@ -242,72 +353,5 @@ class MultiprocessingHub:
 
         if self.progressbar:
             atpbar.flush()
-
-##__________________________________________________________________||
-class WorkerBase:
-    def __init__(self, task_queue, result_queue, logging_queue,
-                 progress_reporter):
-        self.task_queue = task_queue
-        self.result_queue = result_queue
-        self.logging_queue = logging_queue
-        self.progress_reporter = progress_reporter
-
-    def run(self):
-        self._configure_logger()
-        self._configure_progressbar()
-        try:
-            self._run_tasks()
-        except KeyboardInterrupt:
-            pass
-
-    def _configure_logger(self):
-        handler = QueueHandler(self.logging_queue)
-        logger = logging.getLogger()
-        logger.setLevel(logging.DEBUG)
-        logger.addHandler(handler)
-
-    def _configure_progressbar(self):
-        atpbar.register_reporter(self.progress_reporter)
-
-    def _run_tasks(self):
-        while True:
-            message = self.task_queue.get()
-            if message is None:
-                self.task_queue.task_done()
-                break
-            task_idx, task_func = message
-            result = task_func()
-            self.task_queue.task_done()
-            self.result_queue.put((task_idx, result))
-
-ctx_fork = multiprocessing.get_context('fork')
-ctx_spawn = multiprocessing.get_context('spawn')
-ctx_forkserver = multiprocessing.get_context('forkserver')
-
-class WorkerFork(WorkerBase, ctx_fork.Process):
-    def __init__(self, *args, **kwargs):
-        ctx_fork.Process.__init__(self)
-        WorkerBase.__init__(self, *args, **kwargs)
-
-class WorkerSpawn(WorkerBase, ctx_spawn.Process):
-    def __init__(self, *args, **kwargs):
-        ctx_spawn.Process.__init__(self)
-        WorkerBase.__init__(self, *args, **kwargs)
-
-class WorkerForkserver(WorkerBase, ctx_forkserver.Process):
-    def __init__(self, *args, **kwargs):
-        ctx_forkserver.Process.__init__(self)
-        WorkerBase.__init__(self, *args, **kwargs)
-
-##__________________________________________________________________||
-# https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
-def logger_thread(queue):
-    while True:
-        record = queue.get()
-        if record is None:
-            break
-        logger = logging.getLogger(record.name)
-        if logger.getEffectiveLevel() <= record.levelno:
-            logger.handle(record)
 
 ##__________________________________________________________________||

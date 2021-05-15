@@ -3,6 +3,7 @@ import time
 
 import pytest
 
+from mantichora.hubmp import available_mp_start_methods
 from mantichora import mantichora
 
 ##__________________________________________________________________||
@@ -13,9 +14,12 @@ def task_perpetual(ret):
 
 ##__________________________________________________________________||
 params = [
-    pytest.param(dict(mode='multiprocessing', mp_start_method='fork'), id='multiprocessing-fork'),
-    pytest.param(dict(mode='multiprocessing', mp_start_method='spawn'), id='multiprocessing-spawn'),
-    pytest.param(dict(mode='multiprocessing', mp_start_method='forkserver'), id='multiprocessing-forkserver'),
+    *[
+        pytest.param(
+            dict(mode='multiprocessing', mp_start_method=m),
+            id=f'multiprocessing-{m}'
+        )
+        for m in available_mp_start_methods],
     # pytest.param(dict(mode='threading'), id='threading')
 ]
 
