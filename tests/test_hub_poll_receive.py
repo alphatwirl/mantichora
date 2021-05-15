@@ -4,18 +4,17 @@ import functools
 
 import pytest
 
-from mantichora.hubmp import MultiprocessingHub
+from mantichora.hubmp import MultiprocessingHub, available_mp_start_methods
 from mantichora.hubthreading import ThreadingHub
 
 ##__________________________________________________________________||
-mphub_fork = functools.partial(MultiprocessingHub, mp_start_method='fork')
-mphub_spawn = functools.partial(MultiprocessingHub, mp_start_method='spawn')
-mphub_forkserver = functools.partial(MultiprocessingHub, mp_start_method='forkserver')
-
 Hubs = [
-    pytest.param(mphub_fork, id='mp-fork'),
-    pytest.param(mphub_spawn, id='mp-spawn'),
-    pytest.param(mphub_forkserver, id='mp-forkserver'),
+    *[
+        pytest.param(
+            functools.partial(MultiprocessingHub, mp_start_method=m),
+            id=f'mp-{m}'
+        )
+        for m in available_mp_start_methods],
     pytest.param(ThreadingHub, id='threading'),
     ]
 
