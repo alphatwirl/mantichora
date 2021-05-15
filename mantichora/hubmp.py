@@ -104,6 +104,8 @@ for method in MP_START_METHODS:
     Worker = define_worker_class(method, ctx)
     mp_start_method_dict[method] = MpStartMethod(context=ctx, Worker=Worker)
 
+availabe_mp_start_methods = tuple(mp_start_method_dict.keys())
+
 ctx_fork = mp_start_method_dict['fork'].context
 ctx_spawn = mp_start_method_dict['spawn'].context
 ctx_forkserver = mp_start_method_dict['forkserver'].context
@@ -142,19 +144,17 @@ class MultiprocessingHub:
         if nworkers <= 0:
             raise ValueError("nworkers must be at least one: {} is given".format(nworkers))
 
-        if mp_start_method == 'fork':
-            self.Worker = WorkerFork
-            self.ctx = ctx_fork
-        elif mp_start_method == 'spawn':
-            self.Worker = WorkerSpawn
-            self.ctx = ctx_spawn
-        elif mp_start_method == 'forkserver':
-            self.Worker = WorkerForkserver
-            self.ctx = ctx_forkserver
-        else:
-            raise ValueError(("'mp_start_method' must be one of "
-                              "'fork', 'spawn', 'forkserver': "
-                              "'{}' is given").format(mp_start_method))
+
+        try:
+            m = mp_start_method_dict[mp_start_method]
+        except KeyError:
+            raise ValueError((
+                f"Unknown mp_start_method: {mp_start_method!r}. "
+                f"Available methods: {availabe_mp_start_methods!r}. "
+            ))
+
+        self.Worker = m.Worker
+        self.ctx = m.context
 
         self.progressbar = progressbar
 
