@@ -89,10 +89,10 @@ def define_worker_class(mp_start_method, ctx):
     )
     return worker_class
 
-mp_start_method_default = None
-mp_start_method_dict = {}
-
 MpStartMethod = namedtuple('MpStartMethod', ['context', 'Worker'])
+
+mp_start_method_dict = {}
+mp_start_method_default = None
 
 for method in MP_START_METHODS:
     try:
