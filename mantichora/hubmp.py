@@ -103,16 +103,13 @@ for method in MP_START_METHODS:
         mp_start_method_default = method
     Worker = define_worker_class(method, ctx)
     mp_start_method_dict[method] = MpStartMethod(context=ctx, Worker=Worker)
+    globals()[Worker.__name__] = Worker # for pickle to be able to find the class definition
 
 available_mp_start_methods = tuple(mp_start_method_dict.keys())
 
 ctx_fork = mp_start_method_dict['fork'].context
 ctx_spawn = mp_start_method_dict['spawn'].context
 ctx_forkserver = mp_start_method_dict['forkserver'].context
-
-WorkerFork = mp_start_method_dict['fork'].Worker
-WorkerSpawn = mp_start_method_dict['spawn'].Worker
-WorkerForkserver = mp_start_method_dict['forkserver'].Worker
 
 ##__________________________________________________________________||
 # https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
