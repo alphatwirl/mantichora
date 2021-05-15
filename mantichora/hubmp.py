@@ -5,6 +5,7 @@ import multiprocessing
 import threading
 
 from operator import itemgetter
+from collections import namedtuple
 
 from logging.handlers import QueueHandler
 
@@ -280,24 +281,62 @@ class WorkerBase:
             self.task_queue.task_done()
             self.result_queue.put((task_idx, result))
 
-ctx_fork = multiprocessing.get_context('fork')
-ctx_spawn = multiprocessing.get_context('spawn')
-ctx_forkserver = multiprocessing.get_context('forkserver')
+def define_worker_class(mp_start_method, ctx):
+    """Define a worker class
 
-class WorkerFork(WorkerBase, ctx_fork.Process):
-    def __init__(self, *args, **kwargs):
-        ctx_fork.Process.__init__(self)
+    e.g.,
+    class WorkerFork(WorkerBase, ctx.Process):
+        def __init__(self, *args, **kwargs):
+            ctx.Process.__init__(self)
+            WorkerBase.__init__(self, *args, **kwargs)
+
+    Parameters
+    ----------
+    mp_start_method : str
+        E.g., 'fork', 'spawn','forkserver'
+    ctx : object
+        A multiprocessing context.
+
+    Returns
+    -------
+    class
+
+    """
+
+    name = f'Worker{mp_start_method.capitalize()}'
+    # e.g., "WorkerFork", "WorkerSpawn", "WorkerForkserver"
+
+    bases = (WorkerBase, ctx.Process)
+
+    def init(self, *args, **kwargs):
+        ctx.Process.__init__(self)
         WorkerBase.__init__(self, *args, **kwargs)
 
-class WorkerSpawn(WorkerBase, ctx_spawn.Process):
-    def __init__(self, *args, **kwargs):
-        ctx_spawn.Process.__init__(self)
-        WorkerBase.__init__(self, *args, **kwargs)
+    worker_class = type(
+        name,
+        bases,
+        { '__init__': init }
+    )
+    return worker_class
 
-class WorkerForkserver(WorkerBase, ctx_forkserver.Process):
-    def __init__(self, *args, **kwargs):
-        ctx_forkserver.Process.__init__(self)
-        WorkerBase.__init__(self, *args, **kwargs)
+MP_START_METHODS = ('fork', 'spawn', 'forkserver') # in the order of preferences as default
+mp_start_method_default = None
+mp_start_method_dict = {}
+
+MpStartMethod = namedtuple('MpStartMethod', ['context', 'Worker'])
+
+for method in MP_START_METHODS:
+    ctx = multiprocessing.get_context(method)
+    Worker = define_worker_class(method, ctx)
+    mp_start_method_dict[method] = MpStartMethod(context=ctx, Worker=Worker)
+
+ctx_fork = mp_start_method_dict['fork'].context
+ctx_spawn = mp_start_method_dict['spawn'].context
+ctx_forkserver = mp_start_method_dict['forkserver'].context
+
+WorkerFork = mp_start_method_dict['fork'].Worker
+WorkerSpawn = mp_start_method_dict['spawn'].Worker
+WorkerForkserver = mp_start_method_dict['forkserver'].Worker
 
 ##__________________________________________________________________||
 # https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
