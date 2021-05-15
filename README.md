@@ -503,14 +503,14 @@ INFO:root:finishing "task4"
 
 #### Start method of multiprocessing
 
-*New in version 0.9.9*
+*Updated in version 0.12.0*
 
-Python multiprocessing has three start methods: `spawn`, `fork`,
+Python multiprocessing has three start methods: `fork`, `spawn`,
 `forkserver`. These methods are described in the Python
 [documentation](https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods).
-Mantichora uses the `fork` method by default. You can change the
-method by the option `mp_start_method`. For example, to use the
-`spawn` method,
+Mantichora uses by default the `fork` method on Linux and macOS and
+the `spawn` method on Windows. You can change the method by the option
+`mp_start_method`.
 
 ```python
 with mantichora(mp_start_method='spawn') as mcore:
@@ -528,7 +528,7 @@ with mantichora(mp_start_method='spawn') as mcore:
   example, on how the main module is written. The restrictions are
   described in the Python
   [documentation](https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods).
-- On MacOS, in the `fork` method, errors with the message `may have
+- On macOS, in the `fork` method, errors with the message `may have
   been in progress in another thread when fork() was called` might
   occur. This error might be resolved if the environment variable
   `OBJC_DISABLE_INITIALIZE_FORK_SAFETY` is set `YES` as suggested at
@@ -545,4 +545,4 @@ with mantichora(mp_start_method='spawn') as mcore:
 
 ## Contact
 
-- Tai Sakuma - tai.sakuma@gmail.com
+- [Tai Sakuma](https://github.com/TaiSakuma) - tai.sakuma@gmail.com <span itemscope itemtype="https://schema.org/Person"><a itemprop="sameAs" content="https://orcid.org/0000-0003-3225-9861" href="https://orcid.org/0000-0003-3225-9861" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:text-top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"></a></span>
