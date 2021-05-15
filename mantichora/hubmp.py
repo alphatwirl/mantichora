@@ -89,23 +89,26 @@ def define_worker_class(mp_start_method, ctx):
     )
     return worker_class
 
+def is_mp_start_method_available(method):
+    try:
+        multiprocessing.get_context(method)
+    except ValueError:
+        return False
+    return True
+
+available_mp_start_methods = tuple(m for m in MP_START_METHODS if is_mp_start_method_available(m))
+mp_start_method_default = available_mp_start_methods[0] if available_mp_start_methods else None
+
+
 MpStartMethod = namedtuple('MpStartMethod', ['context', 'Worker'])
 
 mp_start_method_dict = {}
-mp_start_method_default = None
-
-for method in MP_START_METHODS:
-    try:
-        ctx = multiprocessing.get_context(method)
-    except ValueError:
-        continue
-    if mp_start_method_default is None:
-        mp_start_method_default = method
+for method in available_mp_start_methods:
+    ctx = multiprocessing.get_context(method)
     Worker = define_worker_class(method, ctx)
     mp_start_method_dict[method] = MpStartMethod(context=ctx, Worker=Worker)
     globals()[Worker.__name__] = Worker # for pickle to be able to find the class definition
 
-available_mp_start_methods = tuple(mp_start_method_dict.keys())
 
 ##__________________________________________________________________||
 # https://docs.python.org/3/howto/logging-cookbook.html#logging-to-a-single-file-from-multiple-processes
